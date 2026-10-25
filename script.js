@@ -1,20 +1,18 @@
 
 // =====================================
 // Luojia Memory Map
-// Stage 3: Memory Interaction
+// Stage 5: Supabase Integration
 // =====================================
 
 
-// 1. 地图初始化
-
-const initialLatitude = 30.538;
-const initialLongitude = 114.361;
+// 1. Initialize the map
 
 const map = L.map("map").setView(
-    [initialLatitude, initialLongitude],
+    [30.538, 114.361],
     15
 );
 
+// Keep the map tile provider that worked in Stage 3.
 L.tileLayer(
     "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
@@ -25,7 +23,15 @@ L.tileLayer(
 ).addTo(map);
 
 
-// 2. 获取页面中的元素
+// 2. Initialize the Supabase client
+
+const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+
+// 3. Get HTML elements
 
 const memoryPanel = document.getElementById("memoryPanel");
 const selectedLocation = document.getElementById("selectedLocation");
@@ -38,114 +44,210 @@ const saveButton = document.getElementById("saveButton");
 const cancelButton = document.getElementById("cancelButton");
 
 
-// 3. 保存当前状态
+// 4. Application state
 
 let selectedLatLng = null;
 let temporaryMarker = null;
+let isSaving = false;
 
-// 本阶段的记忆仅保存在浏览器内存中
-const memories = [];
+// All saved memory markers are managed here.
+const memoryLayer = L.layerGroup().addTo(map);
 
 
-// 4. 点击地图，选择一个位置
+// 5. Select a location on the map
 
 map.on("click", function (event) {
 
-    // 取得鼠标点击位置的经纬度
+    if (isSaving) {
+        return;
+    }
+
     selectedLatLng = event.latlng;
 
-    // 如果已经有临时标记，先移除
+    // Remove previous temporary marker.
     if (temporaryMarker !== null) {
         map.removeLayer(temporaryMarker);
     }
 
-    // 添加新的临时标记
     temporaryMarker = L.marker(
         selectedLatLng
     ).addTo(map);
 
-    // 显示所选位置
     selectedLocation.textContent =
         selectedLatLng.lat.toFixed(5) + ", " +
         selectedLatLng.lng.toFixed(5);
 
-    // 打开输入面板
     memoryPanel.classList.remove("hidden");
 
-    // 清空旧的提示
     errorMessage.textContent = "";
     statusMessage.textContent = "";
-
-    console.log("Location selected:", selectedLatLng);
 });
 
 
-// 5. 更新输入字数
+// 6. Character count
 
 memoryInput.addEventListener("input", function () {
-
     characterCount.textContent = memoryInput.value.length;
-
     errorMessage.textContent = "";
-
 });
 
 
-// 6. 取消当前选点
+// 7. Cancel current selection
 
 cancelButton.addEventListener("click", function () {
 
-    clearSelection();
-
-    statusMessage.textContent = "已取消本次记录。";
-
-});
-
-
-// 7. 保存记忆
-
-saveButton.addEventListener("click", function () {
-
-    // 检查是否选择地点
-    if (selectedLatLng === null) {
-        errorMessage.textContent = "请先在地图上选择一个位置。";
+    if (isSaving) {
         return;
     }
 
-    // 获取文字内容
+    clearSelection();
+    statusMessage.textContent = "已取消本次记录。";
+});
+
+
+// 8. Submit a memory to Supabase
+
+saveButton.addEventListener("click", async function () {
+
+    // Prevent repeated submissions.
+    if (isSaving) {
+        return;
+    }
+
+    if (selectedLatLng === null) {
+        errorMessage.textContent =
+            "请先在地图上选择一个位置。";
+        return;
+    }
+
     const content = memoryInput.value.trim();
 
-    // 检查空白内容
-    if (content === "") {
-        errorMessage.textContent = "请先写下一段记忆。";
+    if (content.length === 0) {
+        errorMessage.textContent =
+            "请先写下一段记忆。";
         memoryInput.focus();
         return;
     }
 
-    // 创建一条记忆对象
-    const memory = {
-        content: content,
-        latitude: selectedLatLng.lat,
-        longitude: selectedLatLng.lng,
-        createdAt: new Date().toISOString()
-    };
-
-    // 暂存到数组
-    memories.push(memory);
-
-    // 移除临时标记
-    if (temporaryMarker !== null) {
-        map.removeLayer(temporaryMarker);
-        temporaryMarker = null;
+    if (content.length > 500) {
+        errorMessage.textContent =
+            "记忆不能超过 500 个字符。";
+        return;
     }
 
-    // 创建正式的记忆标记
+    // Save the exact selected position.
+    const latitude = selectedLatLng.lat;
+    const longitude = selectedLatLng.lng;
+
+    isSaving = true;
+    saveButton.disabled = true;
+    cancelButton.disabled = true;
+    saveButton.textContent = "正在保存…";
+
+    errorMessage.textContent = "";
+    statusMessage.textContent = "正在保存你的记忆…";
+
+    try {
+
+        // Insert into the cloud database.
+        const { error } = await db
+            .from("memories")
+            .insert({
+                content: content,
+                latitude: latitude,
+                longitude: longitude
+            });
+
+        if (error) {
+            throw error;
+        }
+
+        // Database confirmed the insert.
+        clearSelection();
+
+        statusMessage.textContent =
+            "记忆已保存到云端！正在更新地图…";
+
+        // Reload saved memories.
+        const refreshed = await loadMemories();
+
+        if (refreshed) {
+            statusMessage.textContent =
+                "记忆已成功保存！刷新网页后仍然可以找到它。";
+        } else {
+            statusMessage.textContent =
+                "记忆已保存到云端，但地图暂时无法刷新。请稍后重新加载页面。";
+        }
+
+    } catch (error) {
+
+        console.error("Memory save failed:", error);
+
+        // Keep the draft so the user can try again.
+        errorMessage.textContent =
+            "保存失败，请检查网络连接后重试。";
+
+        statusMessage.textContent =
+            "记忆尚未确认保存，请不要关闭页面。";
+
+    } finally {
+
+        isSaving = false;
+        saveButton.disabled = false;
+        cancelButton.disabled = false;
+        saveButton.textContent = "留下这段记忆";
+
+    }
+});
+
+
+// 9. Load memories from Supabase
+
+async function loadMemories() {
+
+    try {
+
+        const { data, error } = await db
+            .from("memories")
+            .select("id, content, latitude, longitude, created_at")
+            .order("created_at", { ascending: true })
+            .limit(200);
+
+        if (error) {
+            throw error;
+        }
+
+        // Clear old markers only after a successful response.
+        memoryLayer.clearLayers();
+
+        for (const memory of data || []) {
+            addMemoryMarker(memory);
+        }
+
+        console.log("Memories loaded:", (data || []).length);
+        return true;
+
+    } catch (error) {
+
+        console.error("Memory loading failed:", error);
+
+        statusMessage.textContent =
+            "无法读取云端记忆，请检查网络后刷新页面。";
+
+        return false;
+    }
+}
+
+
+// 10. Create a marker from a database record
+
+function addMemoryMarker(memory) {
+
     const memoryMarker = L.marker([
         memory.latitude,
         memory.longitude
-    ]).addTo(map);
+    ]);
 
-    // 创建用于显示文字的弹窗元素
     const popupContent = document.createElement("div");
 
     const popupTitle = document.createElement("strong");
@@ -153,30 +255,19 @@ saveButton.addEventListener("click", function () {
 
     const popupText = document.createElement("p");
     popupText.textContent = memory.content;
+
     popupText.style.whiteSpace = "pre-wrap";
     popupText.style.overflowWrap = "anywhere";
 
     popupContent.appendChild(popupTitle);
     popupContent.appendChild(popupText);
 
-    // 将弹窗绑定到标记
     memoryMarker.bindPopup(popupContent);
-
-    // 显示刚刚保存的记忆
-    memoryMarker.openPopup();
-
-    // 清空输入状态
-    clearSelection();
-
-    // 提供反馈
-    statusMessage.textContent =
-        "记忆已添加到当前地图！刷新网页后会消失，云端保存将在下一阶段实现。";
-
-    console.log("Memory added:", memory);
-});
+    memoryMarker.addTo(memoryLayer);
+}
 
 
-// 8. 清空当前选点
+// 11. Clear the input panel
 
 function clearSelection() {
 
@@ -188,7 +279,6 @@ function clearSelection() {
     }
 
     memoryInput.value = "";
-
     characterCount.textContent = "0";
     errorMessage.textContent = "";
 
@@ -196,6 +286,16 @@ function clearSelection() {
 }
 
 
-// 9. 初始化成功提示
+// 12. Load existing memories when the page opens
 
-console.log("Luojia Memory Map Stage 3 initialized.");
+statusMessage.textContent = "正在读取地图上的记忆…";
+
+loadMemories().then(function (success) {
+
+    if (success) {
+        statusMessage.textContent =
+            "地图已准备好。点击任意位置，留下你的故事。";
+    }
+});
+
+console.log("Luojia Memory Map Stage 5 initialized.");

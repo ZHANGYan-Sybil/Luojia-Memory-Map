@@ -204,6 +204,60 @@ This allows the project to focus on its main interaction while keeping the imple
 The database has not yet been connected to the Leaflet webpage. This will be completed in the next development stage.
 
 
+### Development Entry 05 — Connecting the Map to Supabase
+
+**Date:** [Enter the actual completion date]
+
+**Goal**
+
+Connect the interactive Leaflet map to the Supabase database so that memories can be stored permanently and shared between browsers.
+
+**Implementation**
+
+I integrated the Supabase JavaScript client into the existing webpage.
+
+The program now sends the user's memory text and selected geographical coordinates to the `memories` database table.
+
+When the page loads, it retrieves previously saved memories and displays them as markers on the map.
+
+After submitting a memory, the program checks the database response and reloads the saved records.
+
+**Design Changes**
+
+I replaced temporary JavaScript array storage with cloud database operations.
+
+I also introduced a loading state for the save button and clearer feedback messages.
+
+The program now distinguishes between a successfully saved memory and a failed request.
+
+**Error Handling**
+
+The program prevents empty submissions and repeated clicks while saving.
+
+If a request fails, it displays an error message and keeps the user's unfinished text so they can investigate or try again.
+
+**Testing**
+
+[Record whether submitting, refreshing, cross-browser reading, and empty-input validation worked.]
+
+**Problems and Solutions**
+
+[Describe any actual issues, error messages, and fixes. If none occurred, say so.]
+
+**Result**
+
+[Complete after verifying the database connection.]
+
+**Learning**
+
+[Explain what you learned about asynchronous JavaScript, cloud databases, or feedback design.]
+
+**Remaining Limitations**
+
+The project currently uses a minimal anonymous contribution system without user accounts or content moderation.
+
+The first prototype also limits each map load to 200 records. More advanced data loading and abuse prevention would be necessary for a larger public application.
+
 ---
 
 ## 3. Design Decisions
@@ -265,6 +319,15 @@ ChatGPT assisted with:
 All AI-assisted code must be run and tested before being considered complete.
 
 ### AI Suggestion I Kept
+### Additional AI-Assisted Design Decision
+
+ChatGPT suggested implementing cloud storage only after the basic map interaction was working.
+
+I kept this suggestion because separating the interaction logic from the database setup made it easier to identify errors.
+
+I also chose to keep the first version simple rather than adding authentication, advanced filtering, or a complex backend.
+
+This decision helped me focus on the assignment's main requirement: a clear and working interaction between user input, program response, and feedback.
 
 
 
