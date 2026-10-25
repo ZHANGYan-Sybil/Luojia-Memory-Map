@@ -486,3 +486,39 @@ button:disabled {
         animation-duration: 0.01ms !important;
     }
 }
+
+/* =====================================
+   Home control - Return to campus
+===================================== */
+
+.home-control {
+    margin-top: 8px !important;
+}
+
+.home-control-button {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px !important;
+    height: 34px !important;
+
+    background: #FFF9ED !important;
+    color: #3C4038 !important;
+
+    cursor: pointer;
+}
+
+.home-control-button:hover {
+    background: #F0E5CC !important;
+    color: #B85C45 !important;
+}
+
+.home-control-button svg {
+    display: block;
+}
+
+.home-control-button:focus-visible {
+    outline: 3px solid #526B83;
+    outline-offset: 2px;
+}

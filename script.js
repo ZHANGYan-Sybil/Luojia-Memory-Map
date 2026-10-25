@@ -6,45 +6,128 @@
 // ===============================================
 
 
-// 1. MAP CONFIGURATION
 
-// User-selected southwest and northeast boundaries
-const southwest = [30.51823, 114.31415];
-const northeast = [30.55706, 114.40688];
+ // =====================================
+ // 1. MAP CONFIGURATION
+ // =====================================
 
-const browsingBounds = L.latLngBounds(
-    southwest,
-    northeast
-);
+ // Original campus view
+ const initialCenter = [30.538, 114.361];
+ const initialZoom = 15;
 
-// Small buffer for comfortable dragging
-const allowedBounds = browsingBounds.pad(0.15);
+ // Browsing boundary
+ const southwest = [30.51823, 114.31415];
+ const northeast = [30.55706, 114.40688];
 
-// Create the map
-const map = L.map("map", {
-    zoomControl: false,
-    maxBounds: allowedBounds,
-    maxBoundsViscosity: 1.0
-});
+ const browsingBounds = L.latLngBounds(
+     southwest,
+     northeast
+ );
 
-// Fit the initial view to the selected area
-map.fitBounds(browsingBounds, {
-    padding: [20, 20]
-});
+ // Keep a small buffer around the selected area
+ const allowedBounds = browsingBounds.pad(0.15);
 
-// Keep zooming available, but avoid excessive zooming out
-const minimumZoom = Math.max(
-    10,
-    map.getBoundsZoom(allowedBounds, false) - 1
-);
+ // Create map
+ const map = L.map("map", {
+     zoomControl: false,
+     maxBounds: allowedBounds,
+     maxBoundsViscosity: 1.0
+ });
 
-map.setMinZoom(minimumZoom);
+ // Limit zooming out while preserving the campus view
+ const minimumZoom = Math.min(
+     initialZoom,
+     Math.max(10, map.getBoundsZoom(allowedBounds, false) - 1)
+ );
 
-// Place zoom buttons at the bottom left
-L.control.zoom({
-    position: "bottomleft"
-}).addTo(map);
+ map.setMinZoom(minimumZoom);
 
+ // Restore the original initial view
+ map.setView(initialCenter, initialZoom);
+
+ // Standard zoom buttons
+ L.control.zoom({
+     position: "bottomleft"
+ }).addTo(map);
+
+
+ // =====================================
+ // HOME CONTROL - Return to campus
+ // =====================================
+
+ const HomeControl = L.Control.extend({
+
+     options: {
+         position: "bottomleft"
+     },
+
+     onAdd: function () {
+
+         const container = L.DomUtil.create(
+             "div",
+             "leaflet-bar leaflet-control home-control"
+         );
+
+         const button = L.DomUtil.create(
+             "a",
+             "home-control-button",
+             container
+         );
+
+         button.href = "#";
+         button.title = "返回校园初始视角";
+         button.setAttribute(
+             "aria-label",
+             "返回校园初始视角"
+         );
+         button.setAttribute("role", "button");
+
+         // Simple home icon
+         button.innerHTML = `
+             <svg
+                 width="19"
+                 height="19"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 aria-hidden="true"
+             >
+                 <path d="M3 10.5L12 3l9 7.5"/>
+                 <path d="M5 9.5V21h14V9.5"/>
+                 <path d="M9 21v-7h6v7"/>
+             </svg>
+         `;
+
+         // Prevent clicks from selecting a map location
+         L.DomEvent.disableClickPropagation(container);
+         L.DomEvent.disableScrollPropagation(container);
+
+         L.DomEvent.on(button, "click", function (event) {
+
+             L.DomEvent.stop(event);
+
+             map.setView(initialCenter, initialZoom, {
+                 animate: true
+             });
+
+         });
+
+         // Keyboard activation with Space
+         L.DomEvent.on(button, "keydown", function (event) {
+             if (event.key === " ") {
+                 L.DomEvent.stop(event);
+                 button.click();
+             }
+         });
+
+         return container;
+     }
+ });
+
+ new HomeControl().addTo(map);
 
 // 2. MAP TILES
 

@@ -363,6 +363,38 @@ The priority was to improve the existing interaction without making the project 
 
 [Explain whether the redesigned layout makes the interaction clearer, and what might still need improvement.]
 
+### Development Entry 08 — Refining the Initial Map View
+
+**Date:** [Enter actual completion date]
+
+**Problem**
+
+After redesigning the interface around a larger map, I noticed that the initial view displayed too much geographical information.
+
+This made the experience less focused and could make it harder for first-time visitors to identify the main campus area.
+
+**Design Change**
+
+I restored the original campus-centered view with a zoom level of 15 while retaining the broader geographical browsing boundaries.
+
+I also introduced a custom Home control underneath the map's zoom buttons.
+
+Clicking this control returns the map to its original center and zoom level.
+
+**Reasoning**
+
+A more focused initial view helps communicate that the experience is centered on Wuhan University.
+
+The Home button gives users a simple way to recover their location after exploring the wider map.
+
+**Testing and Result**
+
+[Record the actual results after testing the initial view, Home button, zooming, dragging, and memory interaction.]
+
+**Reflection**
+
+This iteration helped me distinguish between the geographical area a user is allowed to explore and the area that should be shown when the experience first opens.
+
 
 ---
 
