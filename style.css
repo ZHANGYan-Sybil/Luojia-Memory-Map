@@ -1,0 +1,61 @@
+
+/* 页面整体样式 */
+
+body {
+    margin: 0;
+    font-family: Arial, "Microsoft YaHei", sans-serif;
+    background-color: #f7f5ef;
+    color: #33483f;
+}
+
+/* 页面主体 */
+
+.container {
+    max-width: 800px;
+    margin: 100px auto;
+    padding: 30px;
+    text-align: center;
+}
+
+/* 标题 */
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+/* 副标题 */
+
+.subtitle {
+    color: #6d8276;
+    font-size: 18px;
+}
+
+/* 互动区域 */
+
+.demo-box {
+    margin-top: 50px;
+    padding: 40px 20px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* 按钮 */
+
+button {
+    margin: 10px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #608b78;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* 鼠标移动到按钮上时 */
+
+button:hover {
+    background-color: #456d5b;
+}
