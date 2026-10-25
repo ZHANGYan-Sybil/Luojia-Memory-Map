@@ -502,16 +502,86 @@ async function loadMemories() {
 }
 
 
-// 15. DISPLAY SAVED MEMORY MARKERS
 
+// =====================================
+// 15. DISPLAY SAVED MEMORY MARKERS
+// =====================================
+
+// Vintage red map pin icon
+const savedMemoryIcon = L.divIcon({
+    className: "saved-memory-marker",
+
+    html: `
+        <svg
+            viewBox="0 0 40 52"
+            width="40"
+            height="52"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+        >
+            <ellipse
+                cx="20"
+                cy="48"
+                rx="11"
+                ry="3"
+                fill="#3C4038"
+                opacity="0.18"
+            />
+
+            <path
+                d="M20 46
+                   C13 35 3 26 3 18
+                   A17 17 0 1 1 37 18
+                   C37 26 27 35 20 46Z"
+                fill="#934635"
+            />
+
+            <path
+                d="M20 43
+                   C14 33 6 25 6 18
+                   A14 14 0 1 1 34 18
+                   C34 25 26 33 20 43Z"
+                fill="#B85C45"
+            />
+
+            <path
+                d="M12 13 Q16 7 22 10"
+                stroke="#F6CCB6"
+                stroke-width="2.5"
+                fill="none"
+                stroke-linecap="round"
+            />
+
+            <circle
+                cx="20"
+                cy="18"
+                r="5.5"
+                fill="#F0E5CC"
+            />
+        </svg>
+    `,
+
+    iconSize: [40, 52],
+    iconAnchor: [20, 46],
+    popupAnchor: [0, -40]
+});
+
+
+// Add one saved memory marker
 function addMemoryMarker(memory) {
 
-    const marker = L.marker([
-        memory.latitude,
-        memory.longitude
-    ]);
+    const marker = L.marker(
+        [
+            memory.latitude,
+            memory.longitude
+        ],
+        {
+            icon: savedMemoryIcon,
+            title: "阅读此处的记忆"
+        }
+    );
 
-    // Safe popup: user text is never parsed as HTML
+    // Safe popup: text is not interpreted as HTML
     const popupContent = document.createElement("div");
 
     const popupTitle = document.createElement("strong");

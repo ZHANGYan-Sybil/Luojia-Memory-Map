@@ -395,6 +395,75 @@ The Home button gives users a simple way to recover their location after explori
 
 This iteration helped me distinguish between the geographical area a user is allowed to explore and the area that should be shown when the experience first opens.
 
+### Development Entry 09 — Refining Map Visual Hierarchy
+
+**Date:** [Actual date]
+
+**Problem**
+
+The initial map-centered design worked correctly, but its bright base map colors and default blue markers did not feel consistent with the intended warm, archival visual style.
+
+An early CSS filter made the map less distracting, but it also made the overall appearance too grey and subdued.
+
+**Design Changes**
+
+I adjusted the map tile filter to preserve more color and improve brightness and contrast.
+
+I refined the heading typography and introduced LXGW WenKai as the title font, while retaining a clear sans-serif style for functional text.
+
+I replaced the default blue Leaflet markers with custom terracotta-red SVG pins featuring subtle highlights and shadows.
+
+**Design Rationale**
+
+I wanted the geographical information to remain useful while allowing the contributed memories to become the visual focus.
+
+I chose a lightweight CSS filter instead of switching map providers because the existing Leaflet and OpenStreetMap implementation was already working reliably.
+
+**Testing**
+
+[Record actual results, including visual appearance, marker readability, interaction and database persistence.]
+
+**Next Iteration**
+
+Evaluate the map's information density, floating controls, and the visual design of the memory-reading and writing panels.
+
+### Development Entry 10 — Paper-Inspired Memory Interface
+
+**Date:** [Actual completion date]
+
+**Goal**
+
+Create a more consistent visual relationship between the map, memory markers, reading popups, and the writing panel.
+
+**Design Change**
+
+I redesigned the floating memory interface using a restrained stationery-inspired visual language.
+
+Saved memory popups now use warm paper colors, subtle textures, and soft shadows.
+
+The writing panel uses similar paper colors, while the text field includes faint blue horizontal lines inspired by a notebook.
+
+I also refined button shapes, borders, spacing, and small interface elements.
+
+**Design Rationale**
+
+I wanted the experience of reading and writing a memory to feel different from using a standard web form.
+
+At the same time, I deliberately kept the textures subtle so the map and memory text would remain readable.
+
+**Technical Approach**
+
+I implemented the changes with CSS rather than changing the existing Leaflet or Supabase application logic.
+
+**Testing and Reflection**
+
+[Fill in the actual visual and functional test results.]
+
+**Next Step**
+
+Review the new interface in the browser and refine visual details based on actual appearance and usability.
+
+
 
 ---
 
