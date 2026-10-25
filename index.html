@@ -1,47 +1,112 @@
-<CodeBlock language="html" editable> <!DOCTYPE html> <html lang="zh-CN">
 
-<head> <meta charset="UTF-8">
+<!DOCTYPE html>
+<html lang="zh-CN">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>珞珈记忆地图 | Luojia Memory Map</title>
+    <title>珞珈记忆地图 | Luojia Memory Map</title>
 
-<!-- Leaflet 地图样式 --> <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" >
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    >
 
-<!-- 我们自己的网页样式 --> <link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header class="site-header">
+    <header class="site-header">
+        <h1>珞珈记忆地图</h1>
+        <p>Luojia Memory Map · 每一个地点，都藏着一段故事。</p>
+    </header>
 
-<h1>珞珈记忆地图</h1>
+    <main class="main-content">
 
-<p> Luojia Memory Map · 每一个地点，都藏着一段故事。 </p>
+        <section class="introduction">
+            <h2>在地图上，遇见记忆</h2>
+            <p>
+                点击地图上的任意位置，
+                留下一段与这个地点有关的故事。
+            </p>
+        </section>
 
-</header>
+        <!-- 地图 -->
+        <div id="map"></div>
 
-<main class="main-content">
+        <p class="map-tip">
+            💡 拖动地图探索，单击任意位置即可留下记忆。
+        </p>
 
-<section class="introduction">
+        <!-- 记忆输入面板 -->
+        <section id="memoryPanel" class="memory-panel hidden">
 
-<h2>在地图上，遇见记忆</h2>
+            <h3>在这里，留下你的故事</h3>
 
-<p> 拖动地图，探索熟悉的道路、建筑与湖泊。 未来，你可以在任意地点留下属于自己的故事。 </p>
+            <p class="location-info">
+                你选择的位置：
+                <span id="selectedLocation"></span>
+            </p>
 
-</section>
+            <label for="memoryInput">我的记忆</label>
 
-<!-- 地图显示区域 --> <div id="map"></div>
+            <textarea
+                id="memoryInput"
+                maxlength="500"
+                placeholder="这片地方，让你想起了什么？"
+                rows="5"
+            ></textarea>
 
-<p class="map-tip"> 💡 试试拖动地图，或使用左上角的 + 和 - 放大缩小。 </p>
+            <p class="character-count">
+                <span id="characterCount">0</span> / 500
+            </p>
 
-</main>
+            <p id="errorMessage"
+               class="error-message"
+               role="alert"></p>
 
-<footer> <p>Luojia Memory Map · An Interactive Experience</p> </footer>
+            <div class="button-group">
 
-<!-- Leaflet 地图库 --> <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""> </script>
+                <button id="cancelButton"
+                        class="cancel-button">
+                    取消
+                </button>
 
-<!-- 我们自己的 JavaScript --> <script src="script.js"></script>
+                <button id="saveButton"
+                        class="save-button">
+                    留下这段记忆
+                </button>
 
-</body> </html> </CodeBlock>
+            </div>
+
+        </section>
+
+        <!-- 操作反馈 -->
+        <p id="statusMessage"
+           class="status-message"
+           role="status"
+           aria-live="polite"></p>
+
+    </main>
+
+    <footer>
+        <p>Luojia Memory Map · An Interactive Experience</p>
+    </footer>
+
+    <!-- Leaflet JavaScript -->
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin="">
+    </script>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

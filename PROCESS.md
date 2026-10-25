@@ -123,6 +123,49 @@ A webpage can display HTML and CSS correctly while its JavaScript fails.
 
 Browser Console messages are useful for identifying problems, and testing one component at a time makes debugging easier.
 
+### Development Entry 03 — Creating and Reading Memories
+
+**Date:** [Enter actual completion date]
+
+**Goal**
+
+Implement the project's main interaction: allowing users to select any map location, write a personal memory, and see the memory appear on the map.
+
+**Implementation**
+
+I added a Leaflet map click event to capture the selected geographical coordinates.
+
+When the user selects a location, the webpage displays a temporary marker and opens a text input panel.
+
+The user can write a memory, submit it, and then click the resulting map marker to read the text.
+
+I also added a character counter, a cancel button, and feedback messages.
+
+**Error Handling**
+
+The program checks whether the memory text is empty or contains only whitespace.
+
+If the user attempts to submit an empty memory, the program displays an error message instead of creating a marker.
+
+**Design Decision**
+
+At this stage, I used a JavaScript array to store memories temporarily instead of immediately connecting the cloud database.
+
+This allowed me to test the user interaction separately from the database.
+
+**Testing and Result**
+
+[Record the features you actually tested and whether they worked.]
+
+**Learning**
+
+[Describe what you learned from implementing and testing this interaction.]
+
+**Remaining Limitation**
+
+Memories are currently stored only in the active browser session and disappear when the page is refreshed. Persistent cloud storage is planned for the next stage.
+
+
 ---
 
 ## 3. Design Decisions

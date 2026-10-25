@@ -49,3 +49,145 @@ footer { text-align: center; padding: 25px 20px; font-size: 13px; color: #8a9c90
 .introduction h2 { font-size: 21px; }
 
 #map { height: 450px; } } </CodeBlock>
+
+/* =====================================
+   Stage 3: Memory interaction
+===================================== */
+
+/* 隐藏未使用的面板 */
+
+.hidden {
+    display: none;
+}
+
+/* 记忆输入面板 */
+
+.memory-panel {
+    margin-top: 25px;
+    padding: 30px;
+    background-color: #ffffff;
+    border: 1px solid #dbe4da;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+}
+
+.memory-panel h3 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    font-size: 22px;
+}
+
+.location-info {
+    padding: 12px 15px;
+    background-color: #f0f5ef;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #60796b;
+}
+
+.memory-panel label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* 文本输入框 */
+
+#memoryInput {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #cad8cb;
+    border-radius: 8px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+#memoryInput:focus {
+    outline: 2px solid #80aa94;
+    border-color: #80aa94;
+}
+
+/* 字数统计 */
+
+.character-count {
+    text-align: right;
+    color: #819287;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+/* 按钮 */
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.button-group button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cancel-button {
+    background-color: #e8ece7;
+    color: #52675b;
+}
+
+.cancel-button:hover {
+    background-color: #d9e1d8;
+}
+
+.save-button {
+    background-color: #608b78;
+    color: white;
+}
+
+.save-button:hover {
+    background-color: #456d5b;
+}
+
+/* 错误与状态提示 */
+
+.error-message {
+    color: #b34747;
+    font-size: 14px;
+}
+
+.error-message:empty,
+.status-message:empty {
+    display: none;
+}
+
+.status-message {
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    background-color: #e8f2e8;
+    color: #426d53;
+    font-size: 14px;
+}
+
+/* 手机屏幕适配 */
+
+@media (max-width: 600px) {
+
+    .memory-panel {
+        padding: 20px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .button-group button {
+        width: 100%;
+    }
+}
