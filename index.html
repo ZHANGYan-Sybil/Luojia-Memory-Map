@@ -7,7 +7,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>珞珈记忆地图 | Luojia Memory Map</title>
+    <title>珞珈记忆地图</title>
 
     <!-- Leaflet CSS -->
     <link
@@ -17,102 +17,123 @@
         crossorigin=""
     >
 
+    <!-- Project styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+    <!-- Top header -->
     <header class="site-header">
         <h1>珞珈记忆地图</h1>
-        <p>Luojia Memory Map · 每一个地点，都藏着一段故事。</p>
+
+        <p>
+            点击地图上的任意位置，
+            留下一段与这个地点有关的故事。
+        </p>
     </header>
 
-    <main class="main-content">
+    <!-- Main map experience -->
+    <main class="map-experience">
 
-        <section class="introduction">
-            <h2>在地图上，遇见记忆</h2>
-            <p>
-                点击地图上的任意位置，
-                留下一段与这个地点有关的故事。
-            </p>
-        </section>
-
-        <!-- 地图 -->
-         
-<!-- Memory statistics -->
-<div class="memory-summary">
-
-    <div class="summary-description">
-        <strong>这张地图正在收藏故事</strong>
-        <span>每一个标记，都是一段记忆。</span>
-    </div>
-
-    <div class="memory-counter">
-        <span id="memoryCount">—</span>
-        <small>段记忆</small>
-    </div>
-
-</div>
         <div id="map"></div>
 
-        <p class="map-tip">
-            💡 拖动地图探索，单击任意位置即可留下记忆。
-        </p>
+        <!-- Memory counter overlay -->
+        <div class="memory-summary">
+            <span class="summary-label">这张地图收藏着</span>
 
-        <!-- 记忆输入面板 -->
-        <section id="memoryPanel" class="memory-panel hidden">
+            <div class="summary-number">
+                <strong id="memoryCount">—</strong>
+                <span>段记忆</span>
+            </div>
+        </div>
 
-            <h3>在这里，留下你的故事</h3>
+        <!-- Writing panel overlay -->
+        <section
+            id="memoryPanel"
+            class="memory-panel hidden"
+            aria-labelledby="panelTitle"
+        >
+
+            <div class="panel-heading">
+                <div>
+                    <span class="eyebrow">A PLACE TO REMEMBER</span>
+                    <h2 id="panelTitle">
+                        在这里，留下你的故事
+                    </h2>
+                </div>
+
+                <button
+                    id="panelCloseButton"
+                    class="icon-close"
+                    type="button"
+                    aria-label="关闭书写窗口"
+                >
+                    ×
+                </button>
+            </div>
 
             <p class="location-info">
-                你选择的位置：
-                <span id="selectedLocation"></span>
+                <span>你选择的位置</span>
+                <strong id="selectedLocation"></strong>
             </p>
 
-            <label for="memoryInput">我的记忆</label>
+            <label for="memoryInput">
+                我的记忆
+            </label>
 
             <textarea
                 id="memoryInput"
                 maxlength="500"
-                placeholder="这片地方，让你想起了什么？"
-                rows="5"
+                rows="6"
+                placeholder="在这个地方，发生过什么值得记住的事？"
             ></textarea>
 
             <p class="character-count">
                 <span id="characterCount">0</span> / 500
             </p>
 
-            <p id="errorMessage"
-               class="error-message"
-               role="alert"></p>
+            <p
+                id="errorMessage"
+                class="error-message"
+                role="alert"
+            ></p>
 
             <div class="button-group">
-
-                <button id="cancelButton"
-                        class="cancel-button">
+                <button
+                    id="cancelButton"
+                    type="button"
+                    class="cancel-button"
+                >
                     取消
                 </button>
 
-                <button id="saveButton"
-                        class="save-button">
+                <button
+                    id="saveButton"
+                    type="button"
+                    class="save-button"
+                >
                     留下这段记忆
                 </button>
-
             </div>
 
         </section>
 
-        <!-- 操作反馈 -->
-        <p id="statusMessage"
-           class="status-message"
-           role="status"
-           aria-live="polite"></p>
+        <!-- Status feedback -->
+        <div
+            id="statusMessage"
+            class="status-message"
+            role="status"
+            aria-live="polite"
+        ></div>
+
+        <!-- Interaction guidance -->
+        <div class="map-guidance">
+            <span class="guidance-dot"></span>
+            选择地点 · 点击加号 · 留下记忆
+        </div>
 
     </main>
-
-    <footer>
-        <p>Luojia Memory Map · An Interactive Experience</p>
-    </footer>
 
     <!-- Leaflet JavaScript -->
     <script
@@ -121,17 +142,14 @@
         crossorigin="">
     </script>
 
-    
-<!-- Leaflet JavaScript: keep the existing Leaflet script above -->
+    <!-- Supabase JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- Supabase JavaScript client -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Existing Supabase configuration -->
+    <script src="config.js"></script>
 
-<!-- Project configuration -->
-<script src="config.js"></script>
-
-<!-- Our application logic -->
-<script src="script.js"></script>
+    <!-- Application -->
+    <script src="script.js"></script>
 
 </body>
 </html>

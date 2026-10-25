@@ -314,6 +314,55 @@ The automatic scrolling connects the user's map selection with the next required
 
 Conduct a user trial with another person and use the observations to evaluate the design.
 
+### Development Entry 07 — Map-Centered Interface Redesign
+
+**Date:** [Enter actual completion date]
+
+**Goal**
+
+Redesign the interface to make the map the central element of the experience and simplify the process of contributing a memory.
+
+**Design Inspiration**
+
+The layout was inspired by the map-centered interaction approach of Queering the Map.
+
+Instead of arranging content in separate sections above and below the map, I wanted the entire experience to take place within the geographical interface.
+
+**Changes**
+
+I redesigned the page around a large interactive map with a compact title section.
+
+I moved the memory counter and writing interface into floating elements above the map.
+
+I also changed the memory creation process into two steps:
+
+1. Select a location on the map.
+2. Click the plus button beside the selected location to open the writing panel.
+
+The writing panel now appears in the upper-right corner of the map.
+
+I introduced an initial geographical browsing boundary around Wuhan University and its surroundings.
+
+**Design Decisions**
+
+I kept the existing Supabase database structure and memory-reading functionality.
+
+I chose not to implement image uploads during this redesign because they would introduce additional storage and error-handling requirements.
+
+The priority was to improve the existing interaction without making the project unnecessarily complex.
+
+**Testing**
+
+[Record the actual results of map loading, location selection, opening the writing panel, saving memories, refreshing, and testing map boundaries.]
+
+**Problems and Solutions**
+
+[Record any real errors encountered and the changes made.]
+
+**Reflection**
+
+[Explain whether the redesigned layout makes the interaction clearer, and what might still need improvement.]
+
 
 ---
 

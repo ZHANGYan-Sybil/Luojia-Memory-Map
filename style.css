@@ -1,406 +1,488 @@
-<CodeBlock language="css" editable> /* 页面基础样式 */
 
-* { box-sizing: border-box; }
+/* =========================================
+   Luojia Memory Map
+   Visual Redesign — Round 1
+========================================= */
 
-body { margin: 0; font-family: Arial, "Microsoft YaHei", sans-serif; background-color: #f7f5ef; color: #33483f; }
+:root {
+    --paper: #F0E5CC;
+    --sand: #C7B58A;
+    --red: #B85C45;
+    --blue: #526B83;
+    --ink: #3C4038;
 
-/* 顶部标题区域 */
+    --white-paper: #FFF9ED;
+    --line: rgba(60, 64, 56, 0.14);
 
-.site-header { padding: 40px 20px 30px; text-align: center; background-color: #e8eee7; }
-
-.site-header h1 { margin: 0; font-size: 38px; font-weight: bold; }
-
-.site-header p { margin-top: 12px; font-size: 15px; color: #708579; }
-
-/* 网页主体 */
-
-.main-content { max-width: 1100px; margin: 35px auto; padding: 0 20px; }
-
-/* 地图前面的介绍文字 */
-
-.introduction { margin-bottom: 25px; }
-
-.introduction h2 { font-size: 24px; margin-bottom: 12px; }
-
-.introduction p { font-size: 15px; color: #718277; line-height: 1.8; }
-
-/* 地图区域 */
-
-#map { width: 100%; height: 550px;
-
-border-radius: 12px; border: 1px solid #d5dfd5;
-
-box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06); }
-
-/* 地图下方提示 */
-
-.map-tip { margin-top: 15px; font-size: 14px; color: #718277; }
-
-/* 页面底部 */
-
-footer { text-align: center; padding: 25px 20px; font-size: 13px; color: #8a9c90; }
-
-/* 小屏幕调整 */
-
-@media (max-width: 600px) {
-
-.site-header h1 { font-size: 28px; }
-
-.introduction h2 { font-size: 21px; }
-
-#map { height: 450px; } } </CodeBlock>
-
-/* =====================================
-   Stage 3: Memory interaction
-===================================== */
-
-/* 隐藏未使用的面板 */
-
-.hidden {
-    display: none;
+    --font-title: "LXGW WenKai", "KaiTi", serif;
+    --font-body: "Source Han Sans SC",
+                 "Noto Sans CJK SC",
+                 "Microsoft YaHei",
+                 sans-serif;
 }
 
-/* 记忆输入面板 */
-
-.memory-panel {
-    margin-top: 25px;
-    padding: 30px;
-    background-color: #ffffff;
-    border: 1px solid #dbe4da;
-    border-radius: 14px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+* {
+    box-sizing: border-box;
 }
 
-.memory-panel h3 {
-    margin-top: 0;
-    margin-bottom: 18px;
-    font-size: 22px;
-}
-
-.location-info {
-    padding: 12px 15px;
-    background-color: #f0f5ef;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #60796b;
-}
-
-.memory-panel label {
-    display: block;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-/* 文本输入框 */
-
-#memoryInput {
+html,
+body {
+    margin: 0;
     width: 100%;
-    padding: 15px;
-    border: 1px solid #cad8cb;
-    border-radius: 8px;
-    resize: vertical;
-    font-family: inherit;
-    font-size: 15px;
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--paper);
+}
+
+/* Header */
+
+.site-header {
+    min-height: 110px;
+    padding: 17px 24px 15px;
+    text-align: center;
+    background: var(--paper);
+    border-bottom: 1px solid var(--sand);
+}
+
+.site-header h1 {
+    margin: 0;
+    font-family: var(--font-title);
+    font-size: clamp(29px, 3vw, 39px);
+    font-weight: 500;
+    letter-spacing: 3px;
+    line-height: 1.45;
+}
+
+.site-header p {
+    margin: 7px 0 0;
+    font-size: 13px;
+    color: var(--blue);
     line-height: 1.7;
 }
 
-#memoryInput:focus {
-    outline: 2px solid #80aa94;
-    border-color: #80aa94;
+/* Map layout */
+
+.map-experience {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 110px);
+    min-height: 480px;
+    isolation: isolate;
+    overflow: hidden;
 }
 
-/* 字数统计 */
+#map {
+    width: 100%;
+    height: 100%;
+    background: #E6E8DC;
+}
+
+/* Memory counter */
+
+.memory-summary {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    z-index: 800;
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    padding: 12px 17px;
+    background: rgba(255, 249, 237, 0.96);
+    border: 1px solid var(--sand);
+    border-radius: 10px;
+
+    box-shadow: 0 7px 22px rgba(60, 64, 56, 0.12);
+    pointer-events: none;
+}
+
+.summary-label {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.summary-number {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    color: var(--red);
+}
+
+.summary-number strong {
+    font-family: var(--font-title);
+    font-size: 25px;
+}
+
+.summary-number span {
+    font-size: 12px;
+}
+
+/* Writing panel */
+
+.memory-panel {
+    position: absolute;
+    z-index: 1100;
+
+    top: 24px;
+    right: 24px;
+
+    width: min(390px, calc(100% - 48px));
+    max-height: calc(100% - 48px);
+    overflow-y: auto;
+
+    padding: 25px;
+
+    background: var(--white-paper);
+    border: 1px solid var(--sand);
+    border-radius: 8px;
+
+    box-shadow:
+        0 16px 40px rgba(60, 64, 56, 0.18),
+        0 2px 5px rgba(60, 64, 56, 0.05);
+}
+
+/* Important: panel must stay hidden until requested */
+
+.memory-panel.hidden {
+    display: none;
+}
+
+.panel-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.eyebrow {
+    font-size: 10px;
+    letter-spacing: 1.8px;
+    color: var(--blue);
+}
+
+.panel-heading h2 {
+    margin: 8px 0 0;
+    font-family: var(--font-title);
+    font-weight: 500;
+    font-size: 23px;
+    line-height: 1.5;
+}
+
+.icon-close {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+
+    background: transparent;
+    color: var(--ink);
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Selected location */
+
+.location-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    margin: 0 0 19px;
+    padding: 12px 14px;
+
+    background: rgba(199, 181, 138, 0.18);
+    border-left: 3px solid var(--sand);
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.location-info span {
+    color: var(--blue);
+}
+
+.location-info strong {
+    font-weight: 500;
+}
+
+/* Writing area */
+
+.memory-panel label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#memoryInput {
+    display: block;
+    width: 100%;
+    min-height: 175px;
+    padding: 13px 15px;
+
+    background-color: #FFFCF5;
+    color: var(--ink);
+
+    border: 1px solid #B6C7D2;
+    border-radius: 5px;
+
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 28px;
+
+    resize: vertical;
+}
+
+#memoryInput:focus {
+    outline: 2px solid rgba(82, 107, 131, 0.3);
+    border-color: var(--blue);
+}
 
 .character-count {
+    margin: 6px 0 14px;
+    font-size: 12px;
+    color: var(--blue);
     text-align: right;
-    color: #819287;
-    font-size: 13px;
-    margin-top: 6px;
 }
 
-/* 按钮 */
+/* Buttons */
 
 .button-group {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 10px;
 }
 
 .button-group button {
-    padding: 12px 22px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
+    min-height: 39px;
+    padding: 10px 17px;
+
+    border: 1px solid transparent;
+    border-radius: 5px;
+
+    font-family: inherit;
+    font-size: 13px;
+
     cursor: pointer;
 }
 
 .cancel-button {
-    background-color: #e8ece7;
-    color: #52675b;
-}
-
-.cancel-button:hover {
-    background-color: #d9e1d8;
+    background: #E9DFC9;
+    color: var(--ink);
 }
 
 .save-button {
-    background-color: #608b78;
-    color: white;
+    background: var(--red);
+    color: #FFFFFF;
 }
 
-.save-button:hover {
-    background-color: #456d5b;
+.save-button:hover:not(:disabled) {
+    background: #9D4B39;
 }
-
-/* 错误与状态提示 */
-
-.error-message {
-    color: #b34747;
-    font-size: 14px;
-}
-
-.error-message:empty,
-.status-message:empty {
-    display: none;
-}
-
-.status-message {
-    margin-top: 18px;
-    padding: 14px 18px;
-    border-radius: 8px;
-    background-color: #e8f2e8;
-    color: #426d53;
-    font-size: 14px;
-}
-
-/* 手机屏幕适配 */
-
-@media (max-width: 600px) {
-
-    .memory-panel {
-        padding: 20px;
-    }
-
-    .button-group {
-        flex-direction: column;
-    }
-
-    .button-group button {
-        width: 100%;
-    }
-}
-
-/* Stage 5: Saving state */
 
 button:disabled {
     opacity: 0.55;
     cursor: not-allowed;
 }
 
-.status-message {
+/* Error and status */
+
+.error-message {
+    color: #A23F36;
+    font-size: 13px;
     line-height: 1.6;
 }
 
-/* =====================================
-   Stage 6: Visual and UX Improvements
-===================================== */
-
-/* Consistent color variables */
-
-:root {
-    --paper: #F7F5EF;
-    --sage-light: #E8EEE7;
-    --forest: #33483F;
-    --sage: #608B78;
-    --terracotta: #B96F58;
-    --muted-text: #718277;
-    --border-light: #DCE5DC;
+.error-message:empty {
+    display: none;
 }
 
-/* Improve overall appearance */
+.status-message {
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    z-index: 850;
 
-body {
-    background-color: var(--paper);
-    color: var(--forest);
+    transform: translateX(-50%);
+
+    max-width: min(620px, calc(100% - 40px));
+    padding: 11px 17px;
+
+    background: rgba(255, 249, 237, 0.97);
+    border: 1px solid var(--sand);
+    border-radius: 8px;
+
+    box-shadow: 0 5px 20px rgba(60, 64, 56, 0.13);
+
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.5;
+    pointer-events: none;
 }
 
-/* Site header */
-
-.site-header {
-    padding: 48px 20px 38px;
-    background-color: var(--sage-light);
-    border-bottom: 1px solid var(--border-light);
+.status-message:empty {
+    display: none;
 }
 
-.site-header h1 {
-    letter-spacing: 2px;
-    font-size: 40px;
-}
+.map-guidance {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    z-index: 800;
 
-.site-header p {
-    line-height: 1.7;
-}
-
-/* Main content */
-
-.main-content {
-    max-width: 1120px;
-    margin: 42px auto;
-}
-
-.introduction {
-    margin-bottom: 26px;
-}
-
-.introduction h2 {
-    font-size: 26px;
-    letter-spacing: 0.5px;
-}
-
-.introduction p {
-    max-width: 720px;
-    line-height: 1.9;
-}
-
-/* Memory summary */
-
-.memory-summary {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap: 8px;
 
-    padding: 18px 22px;
-    margin-bottom: 18px;
+    padding: 10px 14px;
 
-    background-color: #FFFFFF;
-    border: 1px solid var(--border-light);
-    border-radius: 12px;
+    background: rgba(255, 249, 237, 0.95);
+    border: 1px solid var(--sand);
+    border-radius: 8px;
+
+    color: var(--blue);
+    font-size: 12px;
+
+    pointer-events: none;
 }
 
-.summary-description {
+.guidance-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--red);
+    border-radius: 50%;
+}
+
+/* Temporary marker and plus button */
+
+.selection-dot {
+    width: 17px;
+    height: 17px;
+
+    background: var(--red);
+    border: 3px solid #FFF9ED;
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 3px rgba(184, 92, 69, 0.25),
+        0 3px 8px rgba(60, 64, 56, 0.25);
+}
+
+.add-memory-button {
+    width: 39px;
+    height: 39px;
+
     display: flex;
-    flex-direction: column;
-    gap: 7px;
-}
-
-.summary-description strong {
-    font-size: 16px;
-}
-
-.summary-description span {
-    font-size: 13px;
-    color: var(--muted-text);
-}
-
-.memory-counter {
-    display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
 
-    min-width: 84px;
-    padding: 10px 16px;
+    background: var(--red);
+    color: #FFFFFF;
 
-    background-color: var(--sage-light);
-    border-radius: 10px;
+    border: 3px solid #FFF9ED;
+    border-radius: 50%;
+
+    box-shadow: 0 4px 12px rgba(60, 64, 56, 0.28);
+
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
 }
 
-#memoryCount {
-    font-size: 27px;
-    font-weight: bold;
-    color: var(--forest);
+.add-memory-button:hover {
+    background: #9D4B39;
 }
 
-.memory-counter small {
-    font-size: 12px;
-    color: var(--sage);
+.add-memory-button:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 3px;
 }
 
-/* Map */
+/* Avoid oversized default icon styling */
 
-#map {
-    height: 560px;
-    border-radius: 14px;
-    border: 1px solid var(--border-light);
+.selection-marker,
+.add-button-marker {
+    background: transparent;
+    border: none;
 }
 
-/* Input panel */
+/* Leaflet controls */
 
-.memory-panel {
-    scroll-margin-top: 24px;
-    border-radius: 14px;
-    border: 1px solid var(--border-light);
-}
-
-.memory-panel h3 {
-    color: var(--forest);
-}
-
-.save-button {
-    background-color: var(--sage);
-    transition: background-color 0.2s ease;
-}
-
-.save-button:hover:not(:disabled) {
-    background-color: #456D5B;
-}
-
-.cancel-button {
-    transition: background-color 0.2s ease;
-}
-
-/* Feedback */
-
-.status-message {
-    border: 1px solid #D5E5D6;
+.leaflet-control-zoom a {
+    color: var(--ink);
 }
 
 /* Responsive layout */
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
 
     .site-header {
-        padding: 34px 15px;
+        min-height: 100px;
+        padding: 16px 15px;
     }
 
     .site-header h1 {
         font-size: 29px;
     }
 
-    .main-content {
-        margin: 26px auto;
+    .site-header p {
+        font-size: 11px;
+    }
+
+    .map-experience {
+        height: calc(100dvh - 100px);
+        min-height: 420px;
     }
 
     .memory-summary {
-        padding: 14px;
+        top: 12px;
+        left: 12px;
+        padding: 9px 11px;
+        gap: 10px;
     }
 
-    #memoryCount {
-        font-size: 23px;
+    .summary-label {
+        font-size: 11px;
     }
 
-    #map {
-        height: 430px;
+    .summary-number strong {
+        font-size: 20px;
+    }
+
+    .memory-panel {
+        top: 12px;
+        right: 12px;
+        width: calc(100% - 24px);
+        max-height: calc(100% - 24px);
+        padding: 19px;
+    }
+
+    .status-message {
+        bottom: 60px;
+        font-size: 11px;
+    }
+
+    .map-guidance {
+        bottom: 12px;
+        right: 12px;
+        font-size: 10px;
     }
 }
 
-/* Accessibility: reduce motion when requested */
+/* Reduced motion */
 
 @media (prefers-reduced-motion: reduce) {
-
     *,
     *::before,
     *::after {
-        scroll-behavior: auto !important;
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
     }
-}
-/* Keep hidden panels invisible */
-
-.memory-panel.hidden {
-    display: none;
 }

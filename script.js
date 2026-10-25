@@ -1,18 +1,56 @@
 
-// =====================================
+// ===============================================
 // Luojia Memory Map
-// Stage 5: Supabase Integration
-// =====================================
+// Visual Redesign - Round 1
+// Leaflet + Supabase
+// ===============================================
 
 
-// 1. Initialize the map
+// 1. MAP CONFIGURATION
 
-const map = L.map("map").setView(
-    [30.538, 114.361],
-    15
+// User-selected southwest and northeast boundaries
+const southwest = [30.51823, 114.31415];
+const northeast = [30.55706, 114.40688];
+
+const browsingBounds = L.latLngBounds(
+    southwest,
+    northeast
 );
 
-// Keep the map tile provider that worked in Stage 3.
+// Small buffer for comfortable dragging
+const allowedBounds = browsingBounds.pad(0.15);
+
+// Create the map
+const map = L.map("map", {
+    zoomControl: false,
+    maxBounds: allowedBounds,
+    maxBoundsViscosity: 1.0
+});
+
+// Fit the initial view to the selected area
+map.fitBounds(browsingBounds, {
+    padding: [20, 20]
+});
+
+// Keep zooming available, but avoid excessive zooming out
+const minimumZoom = Math.max(
+    10,
+    map.getBoundsZoom(allowedBounds, false) - 1
+);
+
+map.setMinZoom(minimumZoom);
+
+// Place zoom buttons at the bottom left
+L.control.zoom({
+    position: "bottomleft"
+}).addTo(map);
+
+
+// 2. MAP TILES
+
+// If you previously used a different working tile
+// provider, preserve that provider and attribution.
+
 L.tileLayer(
     "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
@@ -23,73 +61,162 @@ L.tileLayer(
 ).addTo(map);
 
 
-// 2. Initialize the Supabase client
+// 3. SUPABASE CONNECTION
 
+// Values are defined in the existing config.js file.
 const db = supabase.createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
 );
 
 
-// 3. Get HTML elements
+// 4. GET PAGE ELEMENTS
 
 const memoryPanel = document.getElementById("memoryPanel");
 const selectedLocation = document.getElementById("selectedLocation");
+
 const memoryInput = document.getElementById("memoryInput");
 const characterCount = document.getElementById("characterCount");
+
 const errorMessage = document.getElementById("errorMessage");
 const statusMessage = document.getElementById("statusMessage");
 
 const saveButton = document.getElementById("saveButton");
 const cancelButton = document.getElementById("cancelButton");
+const panelCloseButton = document.getElementById("panelCloseButton");
+
 const memoryCount = document.getElementById("memoryCount");
 
 
-// 4. Application state
+// Prevent clicks inside the panel from reaching the map
+L.DomEvent.disableClickPropagation(memoryPanel);
+L.DomEvent.disableScrollPropagation(memoryPanel);
+
+
+// 5. APPLICATION STATE
 
 let selectedLatLng = null;
+
 let temporaryMarker = null;
+let addButtonMarker = null;
+
 let isSaving = false;
 
-// All saved memory markers are managed here.
+// Saved memory markers
 const memoryLayer = L.layerGroup().addTo(map);
 
 
-// 5. Select a location on the map
+// 6. CUSTOM TEMPORARY LOCATION ICON
+
+const selectionIcon = L.divIcon({
+    className: "selection-marker",
+    html: '<div class="selection-dot"></div>',
+    iconSize: [17, 17],
+    iconAnchor: [8, 8]
+});
+
+
+// 7. SELECT A LOCATION
 
 map.on("click", function (event) {
 
+    // Do not change location during a save request
     if (isSaving) {
         return;
     }
 
     selectedLatLng = event.latlng;
 
-    // Remove previous temporary marker.
-    if (temporaryMarker !== null) {
-        map.removeLayer(temporaryMarker);
-    }
+    // Remove previous temporary markers
+    removeTemporaryMarkers();
 
-    temporaryMarker = L.marker(
-        selectedLatLng
-    ).addTo(map);
+    // Show the selected location
+    temporaryMarker = L.marker(selectedLatLng, {
+        icon: selectionIcon,
+        interactive: false
+    }).addTo(map);
 
+    // Create the circular plus button
+    createAddButton(selectedLatLng);
+
+    // Update location text
     selectedLocation.textContent =
         selectedLatLng.lat.toFixed(5) + ", " +
         selectedLatLng.lng.toFixed(5);
 
-    memoryPanel.classList.remove("hidden");
-    memoryPanel.scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-});
+    // The writing panel opens only after clicking +
+    memoryPanel.classList.add("hidden");
+
     errorMessage.textContent = "";
-    statusMessage.textContent = "";
+
+    statusMessage.textContent =
+        "地点已选择。点击旁边的 +，开始写下你的记忆。";
 });
 
 
-// 6. Character count
+// 8. CREATE THE PLUS BUTTON
 
+function createAddButton(latlng) {
+
+    // Create the button using DOM methods
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "add-memory-button";
+    button.textContent = "+";
+    button.title = "在这里留下记忆";
+    button.setAttribute(
+        "aria-label",
+        "在选定地点添加记忆"
+    );
+
+    // Avoid passing the click through to the map
+    L.DomEvent.disableClickPropagation(button);
+
+    button.addEventListener("click", function (event) {
+
+        event.stopPropagation();
+        event.preventDefault();
+
+        openMemoryPanel();
+    });
+
+    // The plus icon appears beside the selected point
+    const addIcon = L.divIcon({
+        className: "add-button-marker",
+        html: button,
+        iconSize: [39, 39],
+        iconAnchor: [-19, 19]
+    });
+
+    addButtonMarker = L.marker(latlng, {
+        icon: addIcon,
+        keyboard: false,
+        zIndexOffset: 1000
+    }).addTo(map);
+}
+
+
+// 9. OPEN THE WRITING PANEL
+
+function openMemoryPanel() {
+
+    if (selectedLatLng === null || isSaving) {
+        return;
+    }
+
+    memoryPanel.classList.remove("hidden");
+
+    errorMessage.textContent = "";
+
+    statusMessage.textContent =
+        "已打开书写窗口。写下一段属于这里的故事。";
+
+    memoryInput.focus();
+}
+
+
+// 10. UPDATE CHARACTER COUNT
 
 memoryInput.addEventListener("input", function () {
 
@@ -97,19 +224,17 @@ memoryInput.addEventListener("input", function () {
 
     characterCount.textContent = currentLength;
 
-    // Warn when approaching the limit
     if (currentLength >= 450) {
-        characterCount.style.color = "#B96F58";
+        characterCount.style.color = "#B85C45";
     } else {
-        characterCount.style.color = "#819287";
+        characterCount.style.color = "#526B83";
     }
 
     errorMessage.textContent = "";
 });
 
 
-
-// 7. Cancel current selection
+// 11. CANCEL BUTTON
 
 cancelButton.addEventListener("click", function () {
 
@@ -118,15 +243,31 @@ cancelButton.addEventListener("click", function () {
     }
 
     clearSelection();
+
     statusMessage.textContent = "已取消本次记录。";
 });
 
 
-// 8. Submit a memory to Supabase
+// 12. CLOSE PANEL BUTTON
+
+panelCloseButton.addEventListener("click", function () {
+
+    if (isSaving) {
+        return;
+    }
+
+    // Close the panel but keep the selected location
+    memoryPanel.classList.add("hidden");
+
+    statusMessage.textContent =
+        "书写窗口已关闭。点击地点旁的 + 可以继续。";
+});
+
+
+// 13. SAVE MEMORY TO SUPABASE
 
 saveButton.addEventListener("click", async function () {
 
-    // Prevent repeated submissions.
     if (isSaving) {
         return;
     }
@@ -142,6 +283,7 @@ saveButton.addEventListener("click", async function () {
     if (content.length === 0) {
         errorMessage.textContent =
             "请先写下一段记忆。";
+
         memoryInput.focus();
         return;
     }
@@ -152,13 +294,16 @@ saveButton.addEventListener("click", async function () {
         return;
     }
 
-    // Save the exact selected position.
     const latitude = selectedLatLng.lat;
     const longitude = selectedLatLng.lng;
 
+    // Lock the interface during saving
     isSaving = true;
+
     saveButton.disabled = true;
     cancelButton.disabled = true;
+    panelCloseButton.disabled = true;
+
     saveButton.textContent = "正在保存…";
 
     errorMessage.textContent = "";
@@ -166,7 +311,7 @@ saveButton.addEventListener("click", async function () {
 
     try {
 
-        // Insert into the cloud database.
+        // Submit to Supabase
         const { error } = await db
             .from("memories")
             .insert({
@@ -179,46 +324,47 @@ saveButton.addEventListener("click", async function () {
             throw error;
         }
 
-        // Database confirmed the insert.
+        // The database confirmed the insert
         clearSelection();
 
         statusMessage.textContent =
-            "记忆已保存到云端！正在更新地图…";
+            "记忆已保存到云端，正在更新地图…";
 
-        // Reload saved memories.
         const refreshed = await loadMemories();
 
         if (refreshed) {
             statusMessage.textContent =
-                "记忆已成功保存！刷新网页后仍然可以找到它。";
+                "记忆已成功保存！你可以继续探索地图。";
         } else {
             statusMessage.textContent =
-                "记忆已保存到云端，但地图暂时无法刷新。请稍后重新加载页面。";
+                "记忆已保存，但地图暂时无法刷新。请稍后重新加载页面。";
         }
 
     } catch (error) {
 
         console.error("Memory save failed:", error);
 
-        // Keep the draft so the user can try again.
+        // Preserve the user's draft
         errorMessage.textContent =
             "保存失败，请检查网络连接后重试。";
 
         statusMessage.textContent =
-            "记忆尚未确认保存，请不要关闭页面。";
+            "本次提交尚未确认成功，请检查网络。";
 
     } finally {
 
         isSaving = false;
+
         saveButton.disabled = false;
         cancelButton.disabled = false;
-        saveButton.textContent = "留下这段记忆";
+        panelCloseButton.disabled = false;
 
+        saveButton.textContent = "留下这段记忆";
     }
 });
 
 
-// 9. Load memories from Supabase
+// 14. LOAD SAVED MEMORIES
 
 async function loadMemories() {
 
@@ -226,46 +372,63 @@ async function loadMemories() {
 
         const { data, error } = await db
             .from("memories")
-            .select("id, content, latitude, longitude, created_at")
-            .order("created_at", { ascending: true })
+            .select(
+                "id, content, latitude, longitude, created_at"
+            )
+            .order("created_at", {
+                ascending: true
+            })
             .limit(200);
 
         if (error) {
             throw error;
         }
 
-        // Clear old markers only after a successful response.
+        const records = data || [];
+
+        // Remove previous saved markers
         memoryLayer.clearLayers();
 
-        for (const memory of data || []) {
+        // Add one marker for each stored memory
+        for (const memory of records) {
             addMemoryMarker(memory);
         }
-        memoryCount.textContent = (data || []).length;
 
-        console.log("Memories loaded:", (data || []).length);
+        // Update number of loaded memories
+        memoryCount.textContent = records.length;
+
+        console.log(
+            "Loaded memories:",
+            records.length
+        );
+
         return true;
 
     } catch (error) {
 
-        console.error("Memory loading failed:", error);
+        console.error(
+            "Memory loading failed:",
+            error
+        );
 
         statusMessage.textContent =
-            "无法读取云端记忆，请检查网络后刷新页面。";
+            "暂时无法读取云端记忆，请检查网络连接。";
 
         return false;
     }
 }
 
 
-// 10. Create a marker from a database record
+// 15. DISPLAY SAVED MEMORY MARKERS
 
 function addMemoryMarker(memory) {
 
-    const memoryMarker = L.marker([
+    const marker = L.marker([
         memory.latitude,
         memory.longitude
     ]);
 
+    // Safe popup: user text is never parsed as HTML
     const popupContent = document.createElement("div");
 
     const popupTitle = document.createElement("strong");
@@ -280,40 +443,61 @@ function addMemoryMarker(memory) {
     popupContent.appendChild(popupTitle);
     popupContent.appendChild(popupText);
 
-    memoryMarker.bindPopup(popupContent);
-    memoryMarker.addTo(memoryLayer);
+    marker.bindPopup(popupContent, {
+        maxWidth: 300,
+        className: "memory-popup"
+    });
+
+    marker.addTo(memoryLayer);
 }
 
 
-// 11. Clear the input panel
+// 16. REMOVE TEMPORARY MARKERS
 
-function clearSelection() {
-
-    selectedLatLng = null;
+function removeTemporaryMarkers() {
 
     if (temporaryMarker !== null) {
         map.removeLayer(temporaryMarker);
         temporaryMarker = null;
     }
 
+    if (addButtonMarker !== null) {
+        map.removeLayer(addButtonMarker);
+        addButtonMarker = null;
+    }
+}
+
+
+// 17. CLEAR THE CURRENT SELECTION
+
+function clearSelection() {
+
+    selectedLatLng = null;
+
+    removeTemporaryMarkers();
+
     memoryInput.value = "";
     characterCount.textContent = "0";
+    characterCount.style.color = "#526B83";
+
     errorMessage.textContent = "";
 
     memoryPanel.classList.add("hidden");
 }
 
 
-// 12. Load existing memories when the page opens
+// 18. INITIAL DATABASE LOAD
 
-statusMessage.textContent = "正在读取地图上的记忆…";
+statusMessage.textContent =
+    "正在读取地图上的记忆…";
 
 loadMemories().then(function (success) {
 
     if (success) {
-        statusMessage.textContent =
-            "地图已准备好。点击任意位置，留下你的故事。";
+        statusMessage.textContent = "";
     }
 });
 
-console.log("Luojia Memory Map Stage 5 initialized.");
+console.log(
+    "Luojia Memory Map: Redesign Round 1 initialized."
+);
