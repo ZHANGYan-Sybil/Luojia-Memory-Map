@@ -1,26 +1,17 @@
+// Luojia Memory Map - Stage 2
 
-// 找到网页中的元素
+const map = L.map("map").setView([30.538, 114.361], 15);
 
-const message = document.getElementById("message");
+L.tileLayer(
+    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }
+).addTo(map);
 
-const helloButton = document.getElementById("helloButton");
+L.marker([30.538, 114.361])
+    .addTo(map)
+    .bindPopup("珞珈记忆地图：故事从这里开始。");
 
-const resetButton = document.getElementById("resetButton");
-
-
-// 用户点击“开启旅程”
-
-helloButton.addEventListener("click", function () {
-
-    message.textContent = "旅程已经开启！未来这里将出现我们的记忆地图。";
-
-});
-
-
-// 用户点击“重新开始”
-
-resetButton.addEventListener("click", function () {
-
-    message.textContent = "欢迎来到珞珈记忆地图！";
-
-});
+console.log("Map initialized successfully!");

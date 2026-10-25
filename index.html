@@ -1,44 +1,47 @@
+<CodeBlock language="html" editable> <!DOCTYPE html> <html lang="zh-CN">
 
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head> <meta charset="UTF-8">
 
-    <title>珞珈记忆地图</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css">
+<title>珞珈记忆地图 | Luojia Memory Map</title>
+
+<!-- Leaflet 地图样式 --> <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" >
+
+<!-- 我们自己的网页样式 --> <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-    <main class="container">
+<header class="site-header">
 
-        <h1>珞珈记忆地图</h1>
+<h1>珞珈记忆地图</h1>
 
-        <p class="subtitle">
-            每一个地点，都藏着一段故事。
-        </p>
+<p> Luojia Memory Map · 每一个地点，都藏着一段故事。 </p>
 
-        <div class="demo-box">
+</header>
 
-            <p id="message">
-                欢迎来到珞珈记忆地图！
-            </p>
+<main class="main-content">
 
-            <button id="helloButton">
-                点击开启旅程
-            </button>
+<section class="introduction">
 
-            <button id="resetButton">
-                重新开始
-            </button>
+<h2>在地图上，遇见记忆</h2>
 
-        </div>
+<p> 拖动地图，探索熟悉的道路、建筑与湖泊。 未来，你可以在任意地点留下属于自己的故事。 </p>
 
-    </main>
+</section>
 
-    <script src="script.js"></script>
+<!-- 地图显示区域 --> <div id="map"></div>
 
-</body>
-</html>
+<p class="map-tip"> 💡 试试拖动地图，或使用左上角的 + 和 - 放大缩小。 </p>
+
+</main>
+
+<footer> <p>Luojia Memory Map · An Interactive Experience</p> </footer>
+
+<!-- Leaflet 地图库 --> <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""> </script>
+
+<!-- 我们自己的 JavaScript --> <script src="script.js"></script>
+
+</body> </html> </CodeBlock>

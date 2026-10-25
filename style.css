@@ -1,61 +1,51 @@
+<CodeBlock language="css" editable> /* 页面基础样式 */
 
-/* 页面整体样式 */
+* { box-sizing: border-box; }
 
-body {
-    margin: 0;
-    font-family: Arial, "Microsoft YaHei", sans-serif;
-    background-color: #f7f5ef;
-    color: #33483f;
-}
+body { margin: 0; font-family: Arial, "Microsoft YaHei", sans-serif; background-color: #f7f5ef; color: #33483f; }
 
-/* 页面主体 */
+/* 顶部标题区域 */
 
-.container {
-    max-width: 800px;
-    margin: 100px auto;
-    padding: 30px;
-    text-align: center;
-}
+.site-header { padding: 40px 20px 30px; text-align: center; background-color: #e8eee7; }
 
-/* 标题 */
+.site-header h1 { margin: 0; font-size: 38px; font-weight: bold; }
 
-h1 {
-    font-size: 40px;
-    margin-bottom: 15px;
-}
+.site-header p { margin-top: 12px; font-size: 15px; color: #708579; }
 
-/* 副标题 */
+/* 网页主体 */
 
-.subtitle {
-    color: #6d8276;
-    font-size: 18px;
-}
+.main-content { max-width: 1100px; margin: 35px auto; padding: 0 20px; }
 
-/* 互动区域 */
+/* 地图前面的介绍文字 */
 
-.demo-box {
-    margin-top: 50px;
-    padding: 40px 20px;
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-}
+.introduction { margin-bottom: 25px; }
 
-/* 按钮 */
+.introduction h2 { font-size: 24px; margin-bottom: 12px; }
 
-button {
-    margin: 10px;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    background-color: #608b78;
-    color: white;
-    font-size: 15px;
-    cursor: pointer;
-}
+.introduction p { font-size: 15px; color: #718277; line-height: 1.8; }
 
-/* 鼠标移动到按钮上时 */
+/* 地图区域 */
 
-button:hover {
-    background-color: #456d5b;
-}
+#map { width: 100%; height: 550px;
+
+border-radius: 12px; border: 1px solid #d5dfd5;
+
+box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06); }
+
+/* 地图下方提示 */
+
+.map-tip { margin-top: 15px; font-size: 14px; color: #718277; }
+
+/* 页面底部 */
+
+footer { text-align: center; padding: 25px 20px; font-size: 13px; color: #8a9c90; }
+
+/* 小屏幕调整 */
+
+@media (max-width: 600px) {
+
+.site-header h1 { font-size: 28px; }
+
+.introduction h2 { font-size: 21px; }
+
+#map { height: 450px; } } </CodeBlock>
