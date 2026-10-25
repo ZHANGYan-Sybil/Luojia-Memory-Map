@@ -165,6 +165,44 @@ This allowed me to test the user interaction separately from the database.
 
 Memories are currently stored only in the active browser session and disappear when the page is refreshed. Persistent cloud storage is planned for the next stage.
 
+### Development Entry 04 — Setting Up the Cloud Database
+
+**Date:** [Enter the actual completion date]
+
+**Goal**
+
+Create a cloud database to store memories beyond the current browser session.
+
+**Implementation**
+
+I created a Supabase project and a `memories` table with five fields: ID, content, latitude, longitude, and creation time.
+
+I configured Row Level Security to allow anonymous visitors to read and add memories, while preventing anonymous modification or deletion.
+
+I also added database constraints to reject empty text and invalid geographical coordinates.
+
+**Design Decision**
+
+I decided to keep the database structure simple without user accounts or manual moderation.
+
+This allows the project to focus on its main interaction while keeping the implementation manageable.
+
+**Testing**
+
+[Describe the actual results of inserting a valid memory, reading it back, and attempting to insert empty text.]
+
+**Problems and Solutions**
+
+[Record any setup or SQL errors and how they were resolved. If none occurred, state that.]
+
+**Result and Learning**
+
+[Describe what worked and what you learned about storing data in a cloud database.]
+
+**Remaining Work**
+
+The database has not yet been connected to the Leaflet webpage. This will be completed in the next development stage.
+
 
 ---
 
