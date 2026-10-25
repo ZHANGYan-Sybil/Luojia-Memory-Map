@@ -42,6 +42,7 @@ const statusMessage = document.getElementById("statusMessage");
 
 const saveButton = document.getElementById("saveButton");
 const cancelButton = document.getElementById("cancelButton");
+const memoryCount = document.getElementById("memoryCount");
 
 
 // 4. Application state
@@ -78,7 +79,10 @@ map.on("click", function (event) {
         selectedLatLng.lng.toFixed(5);
 
     memoryPanel.classList.remove("hidden");
-
+    memoryPanel.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+});
     errorMessage.textContent = "";
     statusMessage.textContent = "";
 });
@@ -86,10 +90,23 @@ map.on("click", function (event) {
 
 // 6. Character count
 
+
 memoryInput.addEventListener("input", function () {
-    characterCount.textContent = memoryInput.value.length;
+
+    const currentLength = memoryInput.value.length;
+
+    characterCount.textContent = currentLength;
+
+    // Warn when approaching the limit
+    if (currentLength >= 450) {
+        characterCount.style.color = "#B96F58";
+    } else {
+        characterCount.style.color = "#819287";
+    }
+
     errorMessage.textContent = "";
 });
+
 
 
 // 7. Cancel current selection
@@ -223,6 +240,7 @@ async function loadMemories() {
         for (const memory of data || []) {
             addMemoryMarker(memory);
         }
+        memoryCount.textContent = (data || []).length;
 
         console.log("Memories loaded:", (data || []).length);
         return true;

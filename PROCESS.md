@@ -258,6 +258,63 @@ The project currently uses a minimal anonymous contribution system without user 
 
 The first prototype also limits each map load to 200 records. More advanced data loading and abuse prevention would be necessary for a larger public application.
 
+### Development Entry 06 — Improving Usability and Visual Feedback
+
+**Date:** [Enter actual completion date]
+
+**Goal**
+
+Improve the clarity and visual presentation of the memory map without adding unnecessary complexity.
+
+**Design Issues Identified**
+
+The previous version displayed the memory input panel below the map. After selecting a location, users might not immediately notice that a new panel had appeared.
+
+The interface also did not show how many memories had been loaded.
+
+**Changes Implemented**
+
+I improved the layout and visual hierarchy using a consistent palette of warm cream, sage green, and dark forest green.
+
+I also added:
+
+* Automatic scrolling to the memory input panel after a location is selected.
+* A visual warning when the memory text approaches its character limit.
+* A memory counter showing the number of records loaded from the database.
+* Improved spacing, buttons, and responsive layout.
+
+**Design Rationale**
+
+These changes were intended to make the interaction more understandable.
+
+The automatic scrolling connects the user's map selection with the next required action. The memory counter provides an indication of the shared map's existing content.
+
+**Testing and Results**
+
+[Record the actual results of the Stage 6 tests.]
+
+**Problems and Solutions**
+
+**Problem:** After adding usability improvements, the map stopped loading. The browser Console displayed `Uncaught SyntaxError: Unexpected token '}'` in `script.js`.
+
+**Investigation:** I inspected the relevant JavaScript lines and discovered that part of the previous character-count event listener had remained after replacing it with the updated version.
+
+**Solution:** I removed three redundant lines, including an extra closing `});`, while keeping the new character-count logic.
+
+**Result:** [Confirm whether the map and memory interaction work again after testing.]
+
+**Learning:** When updating a JavaScript event listener, I need to replace the entire original block rather than leaving fragments of the old code. Browser Console errors and line numbers helped me identify the problem without rewriting the complete program.
+
+
+**Learning**
+
+[Explain what you learned about visual feedback, navigation, and interface clarity.]
+
+**Next Step**
+
+Conduct a user trial with another person and use the observations to evaluate the design.
+
+
 ---
 
 ## 3. Design Decisions
