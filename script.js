@@ -568,6 +568,7 @@ const savedMemoryIcon = L.divIcon({
 
 
 // Add one saved memory marker
+
 function addMemoryMarker(memory) {
 
     const marker = L.marker(
@@ -581,23 +582,22 @@ function addMemoryMarker(memory) {
         }
     );
 
-    // Safe popup: text is not interpreted as HTML
+    // Show only the memory itself.
+    // Do not repeat a generic heading in every popup.
     const popupContent = document.createElement("div");
 
-    const popupTitle = document.createElement("strong");
-    popupTitle.textContent = "一段留在这里的记忆";
+    popupContent.className = "memory-story";
 
     const popupText = document.createElement("p");
+
+    // Keep user-submitted text safe.
     popupText.textContent = memory.content;
 
-    popupText.style.whiteSpace = "pre-wrap";
-    popupText.style.overflowWrap = "anywhere";
-
-    popupContent.appendChild(popupTitle);
     popupContent.appendChild(popupText);
 
     marker.bindPopup(popupContent, {
-        maxWidth: 300,
+        maxWidth: 330,
+        minWidth: 210,
         className: "memory-popup"
     });
 

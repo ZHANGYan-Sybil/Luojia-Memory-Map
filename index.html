@@ -4,10 +4,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
 
-    <title>珞珈记忆地图</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>珞珈记忆档案</title>
 
     <!-- Leaflet CSS -->
     <link
@@ -17,45 +20,57 @@
         crossorigin=""
     >
 
-    
-<!-- LXGW WenKai: title font -->
-<link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css"
->
+    <!-- LXGW WenKai title font -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css"
+    >
 
-<!-- Project styles -->
-<link rel="stylesheet" href="style.css">
+    <!-- Project CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Top header -->
+    <!-- Main title -->
     <header class="site-header">
-        <h1>珞珈记忆地图</h1>
+
+        <h1>珞珈记忆档案</h1>
 
         <p>
-            点击地图上的任意位置，
-            留下一段与这个地点有关的故事。
+            珞珈山下，东湖之滨，一程山水，一场相逢。
+            把记忆留在青春的珞珈山。
         </p>
+
     </header>
 
-    <!-- Main map experience -->
+
+    <!-- Map-centered experience -->
     <main class="map-experience">
 
+        <!-- Interactive map -->
         <div id="map"></div>
 
-        <!-- Memory counter overlay -->
+
+        <!-- Memory count -->
         <div class="memory-summary">
-            <span class="summary-label">这张地图收藏着</span>
+
+            <span class="summary-label">
+                这张地图收藏着
+            </span>
 
             <div class="summary-number">
+
                 <strong id="memoryCount">—</strong>
+
                 <span>段记忆</span>
+
             </div>
+
         </div>
 
-        <!-- Writing panel overlay -->
+
+        <!-- New memory writing panel -->
         <section
             id="memoryPanel"
             class="memory-panel hidden"
@@ -63,11 +78,17 @@
         >
 
             <div class="panel-heading">
+
                 <div>
-                    <span class="eyebrow">A PLACE TO REMEMBER</span>
+
+                    <span class="eyebrow">
+                        A PLACE TO REMEMBER
+                    </span>
+
                     <h2 id="panelTitle">
-                        在这里，留下你的故事
+                        在这里，留下你的珞珈山遗事
                     </h2>
+
                 </div>
 
                 <button
@@ -78,13 +99,21 @@
                 >
                     ×
                 </button>
+
             </div>
 
+
+            <!-- Selected coordinates -->
             <p class="location-info">
+
                 <span>你选择的位置</span>
+
                 <strong id="selectedLocation"></strong>
+
             </p>
 
+
+            <!-- Memory writing -->
             <label for="memoryInput">
                 我的记忆
             </label>
@@ -93,20 +122,29 @@
                 id="memoryInput"
                 maxlength="500"
                 rows="6"
-                placeholder="在这个地方，发生过什么值得记住的事？"
+                placeholder="也许是那天樱花树下的笑靥如花，也许是那年凌波门上的把酒夜话……"
             ></textarea>
 
+
+            <!-- Character count -->
             <p class="character-count">
+
                 <span id="characterCount">0</span> / 500
+
             </p>
 
+
+            <!-- Validation feedback -->
             <p
                 id="errorMessage"
                 class="error-message"
                 role="alert"
             ></p>
 
+
+            <!-- Action buttons -->
             <div class="button-group">
+
                 <button
                     id="cancelButton"
                     type="button"
@@ -122,11 +160,13 @@
                 >
                     留下这段记忆
                 </button>
+
             </div>
 
         </section>
 
-        <!-- Status feedback -->
+
+        <!-- Save / load status -->
         <div
             id="statusMessage"
             class="status-message"
@@ -134,29 +174,38 @@
             aria-live="polite"
         ></div>
 
-        <!-- Interaction guidance -->
+
+        <!-- Map instructions -->
         <div class="map-guidance">
+
             <span class="guidance-dot"></span>
+
             选择地点 · 点击加号 · 留下记忆
+
         </div>
 
     </main>
 
-    <!-- Leaflet JavaScript -->
+
+    <!-- Leaflet -->
     <script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossorigin="">
-    </script>
+        crossorigin=""
+    ></script>
 
-    <!-- Supabase JavaScript -->
+
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Existing Supabase configuration -->
+
+    <!-- Existing project configuration -->
     <script src="config.js"></script>
 
-    <!-- Application -->
+
+    <!-- Existing application logic -->
     <script src="script.js"></script>
 
 </body>
+
 </html>

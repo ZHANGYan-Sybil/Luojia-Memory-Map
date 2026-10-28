@@ -495,6 +495,108 @@ Basic database permissions and input validation will still be necessary.
 
 **Reason:** This is a small course prototype, so the priority is demonstrating a functioning interaction without unnecessary technical complexity.
 
+### Development Entry 11 — Building a Stronger Narrative Identity
+
+**Date:** [Actual completion date]
+
+**Goal**
+
+Strengthen the emotional and literary identity of the interactive map through its title and interface language.
+
+**Changes**
+
+I renamed the project from "珞珈记忆地图" to "珞珈记忆档案" (Luojia Memory Archive).
+
+I revised the introductory text to evoke Luojia Mountain, East Lake, and shared campus experiences.
+
+The memory-writing panel now uses more evocative wording, including the title "在这里，留下你的珞珈山遗事".
+
+I also refined the heading spacing and typography to accommodate the longer Chinese text.
+
+**Design Rationale**
+
+The word "archive" emphasizes the collection and preservation of memories. The new language aims to make writing a story feel more personal than completing an ordinary online form.
+
+**Testing**
+
+[Record actual results after testing the new layout, text, and existing map interactions.]
+
+**Next Step**
+
+Continue simplifying map overlays and refining the relationship between the paper-inspired interface and the map.
+
+### Development Entry 12 — Refining Map Controls and Visual Hierarchy
+
+**Date:** [Actual completion date]
+
+**Goal**
+
+Reduce visual clutter around the map while making the floating controls more consistent with the archival design.
+
+**Changes**
+
+I lightened the header background to a softer ivory-paper color.
+
+I simplified the memory counter, refined the map controls, and reduced the visual weight of the instruction label.
+
+I also adjusted the writing panel's shadows and small interface details to maintain a consistent visual language.
+
+**Design Rationale**
+
+The map contains a large amount of geographical information, so the surrounding interface should remain visually quiet.
+
+I wanted the user's attention to focus on the campus and the saved memory markers rather than multiple competing UI cards.
+
+**Testing**
+
+[Record actual results of the header, controls, panel, and existing memory interactions.]
+
+**Reflection**
+
+[Describe whether the visual balance improved and whether further simplification is necessary.]
+
+
+### Development Entry 13 — Improving Reading Comfort and Reducing Repetition
+
+**Date:** [Actual completion date]
+
+**Goal**
+
+Improve the readability of memory stories and reduce redundant interface information.
+
+**Changes**
+
+I removed the repeated generic heading from each saved-memory popup, allowing the submitted story to become the primary content.
+
+I increased the memory text size and applied LXGW WenKai more consistently across the interface.
+
+I also enlarged the introductory sentence, memory counter, map controls, and guidance text.
+
+The header was given slightly more vertical space while the map remained the dominant part of the page.
+
+**Design Rationale**
+
+I wanted the interface to feel more like reading an archive and less like using a conventional web application.
+
+The changes prioritize the individual stories, reduce unnecessary labels, and improve the legibility of small text.
+
+**Data Management Consideration**
+
+I also considered whether contributors should be able to delete memories.
+
+Because contributions are anonymous and are not associated with verified user identities, unrestricted public deletion would make it possible for visitors to delete other people's stories.
+
+For the current prototype, I chose to keep deletion under administrator control through Supabase rather than expose an insecure public delete button.
+
+**Testing**
+
+[Record actual test results.]
+
+**Reflection**
+
+[Describe whether the changes improved reading and whether any font sizes need further adjustment.]
+
+
 ---
 
 ## 4. User Testing and Iteration

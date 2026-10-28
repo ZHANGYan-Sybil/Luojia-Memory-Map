@@ -948,3 +948,644 @@ button:disabled {
         max-width: 215px;
     }
 }
+
+
+/* ==========================================
+   ROUND 2C — EDITORIAL TYPOGRAPHY
+   Luojia Memory Archive
+========================================== */
+
+.site-header {
+    min-height: 108px;
+    padding: 15px 20px 17px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: #F0E5CC;
+    border-bottom: 1px solid rgba(199, 181, 138, 0.65);
+}
+
+.site-header h1 {
+    margin: 0;
+
+    font-family: "LXGW WenKai", "KaiTi", serif;
+    font-size: clamp(31px, 3vw, 40px);
+    font-weight: 400;
+
+    letter-spacing: 1.5px;
+    line-height: 1.35;
+
+    color: #3C4038;
+}
+
+.site-header p {
+    max-width: 760px;
+    margin: 6px 0 0;
+
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.45px;
+    line-height: 1.7;
+
+    color: #526B83;
+    text-align: center;
+}
+
+/* Match map height to the updated header */
+
+.map-experience {
+    height: calc(100vh - 108px);
+}
+
+/* Avoid making the longer writing title too heavy */
+
+.panel-heading h2 {
+    font-size: 22px;
+    line-height: 1.55;
+    letter-spacing: 0;
+}
+
+/* Keep placeholder text subtle but readable */
+
+#memoryInput::placeholder {
+    color: #79858B;
+    opacity: 0.82;
+}
+
+/* Small screen adaptations */
+
+@media (max-width: 650px) {
+
+    .site-header {
+        min-height: 116px;
+        padding: 12px 16px;
+    }
+
+    .site-header h1 {
+        font-size: 29px;
+        letter-spacing: 1px;
+    }
+
+    .site-header p {
+        font-size: 11px;
+        line-height: 1.65;
+        letter-spacing: 0.1px;
+    }
+
+    .map-experience {
+        height: calc(100dvh - 116px);
+    }
+
+    .panel-heading h2 {
+        font-size: 20px;
+    }
+}
+
+/* ==========================================
+   ROUND 2D — REFINED MAP OVERLAYS
+   Luojia Memory Archive
+========================================== */
+
+
+/* 1. Lighter archival header */
+
+.site-header {
+    background-color: #FAF5E9;
+    border-bottom: 1px solid rgba(199, 181, 138, 0.45);
+}
+
+.site-header h1 {
+    color: #3C4038;
+    letter-spacing: 0.8px;
+}
+
+.site-header p {
+    color: #526B83;
+}
+
+
+/* 2. Memory count as a small archive label */
+
+.memory-summary {
+    top: 20px;
+    left: 20px;
+
+    gap: 10px;
+    padding: 9px 14px;
+
+    background: rgba(255, 249, 237, 0.94);
+    border: 1px solid rgba(199, 181, 138, 0.58);
+    border-radius: 4px;
+
+    box-shadow:
+        0 2px 10px rgba(60, 64, 56, 0.09);
+}
+
+.summary-label {
+    font-size: 11px;
+    color: #526B83;
+}
+
+.summary-number {
+    gap: 5px;
+}
+
+.summary-number strong {
+    font-family: "LXGW WenKai", "KaiTi", serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #B85C45;
+}
+
+.summary-number span {
+    font-size: 11px;
+    color: #3C4038;
+}
+
+
+/* 3. Make zoom and Home controls form one vertical group */
+
+/* Only affects controls in the bottom-left corner */
+
+.leaflet-bottom.leaflet-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Preserve Leaflet controls while correcting their order */
+
+.leaflet-bottom.leaflet-left .leaflet-control {
+    float: none;
+    clear: none;
+    margin-left: 16px;
+    margin-bottom: 0;
+}
+
+/* Zoom buttons at the top */
+
+.leaflet-bottom.leaflet-left .leaflet-control-zoom {
+    order: 1;
+    margin-bottom: 0;
+}
+
+/* Return-to-campus button underneath */
+
+.leaflet-bottom.leaflet-left .home-control {
+    order: 2;
+    margin-top: -1px !important;
+    margin-bottom: 16px;
+}
+
+
+/* 4. Give all three map buttons consistent styling */
+
+.leaflet-control-zoom,
+.home-control {
+    border: 1px solid rgba(199, 181, 138, 0.85) !important;
+    border-radius: 4px !important;
+
+    box-shadow:
+        0 2px 8px rgba(60, 64, 56, 0.12);
+}
+
+.leaflet-control-zoom a,
+.home-control-button {
+    width: 34px !important;
+    height: 34px !important;
+
+    background: rgba(255, 249, 237, 0.98) !important;
+    color: #3C4038 !important;
+
+    border-color: rgba(199, 181, 138, 0.55) !important;
+
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+}
+
+.leaflet-control-zoom a:hover,
+.home-control-button:hover {
+    background: #F0E5CC !important;
+    color: #B85C45 !important;
+}
+
+.leaflet-control-zoom a:focus-visible,
+.home-control-button:focus-visible {
+    outline: 2px solid #526B83;
+    outline-offset: 2px;
+}
+
+
+/* 5. Make the map guidance less intrusive */
+
+/* Keep a small instruction for first-time visitors */
+
+.map-guidance {
+    right: 18px;
+    bottom: 18px;
+
+    padding: 7px 10px;
+
+    background: rgba(250, 245, 233, 0.88);
+    border: 1px solid rgba(199, 181, 138, 0.40);
+    border-radius: 3px;
+
+    box-shadow: none;
+
+    color: #526B83;
+    font-size: 10px;
+    letter-spacing: 0.2px;
+
+    opacity: 0.84;
+}
+
+.guidance-dot {
+    width: 6px;
+    height: 6px;
+    background: #B85C45;
+}
+
+
+/* 6. Improve visual consistency of the writing panel */
+
+.memory-panel {
+    border-color: rgba(199, 181, 138, 0.8);
+
+    box-shadow:
+        0 2px 3px rgba(60, 64, 56, 0.04),
+        0 8px 24px rgba(60, 64, 56, 0.12),
+        0 22px 50px rgba(60, 64, 56, 0.08);
+}
+
+.panel-heading h2 {
+    color: #3C4038;
+}
+
+.memory-panel label {
+    color: #3C4038;
+    font-weight: 500;
+}
+
+.button-group {
+    gap: 9px;
+}
+
+
+/* 7. Status feedback should appear only when needed */
+
+.status-message {
+    padding: 9px 14px;
+
+    background: rgba(255, 249, 237, 0.97);
+    border: 1px solid rgba(199, 181, 138, 0.65);
+
+    box-shadow:
+        0 3px 14px rgba(60, 64, 56, 0.09);
+
+    font-size: 12px;
+}
+
+/* Preserve the existing empty-state behavior */
+
+.status-message:empty {
+    display: none;
+}
+
+
+/* 8. Small screens */
+
+@media (max-width: 650px) {
+
+    .memory-summary {
+        top: 12px;
+        left: 12px;
+        padding: 8px 10px;
+    }
+
+    .summary-label {
+        font-size: 10px;
+    }
+
+    .summary-number strong {
+        font-size: 19px;
+    }
+
+    .leaflet-bottom.leaflet-left .leaflet-control {
+        margin-left: 12px;
+    }
+
+    .leaflet-bottom.leaflet-left .home-control {
+        margin-bottom: 12px;
+    }
+
+    .map-guidance {
+        right: 12px;
+        bottom: 12px;
+        padding: 6px 8px;
+        font-size: 9px;
+    }
+
+    .memory-panel {
+        box-shadow:
+            0 6px 24px rgba(60, 64, 56, 0.16);
+    }
+}
+
+
+/* ==========================================
+   ROUND 2E — READABLE ARCHIVAL TYPOGRAPHY
+   Luojia Memory Archive
+========================================== */
+
+
+/* 1. Unified editorial typography */
+
+/*
+   LXGW WenKai is used for our interface text.
+   Map tile labels are part of the map images
+   and cannot be changed with this rule.
+*/
+
+body,
+button,
+textarea,
+input,
+.memory-summary,
+.memory-panel,
+.map-guidance,
+.status-message,
+.memory-popup .leaflet-popup-content {
+    font-family:
+        "LXGW WenKai",
+        "KaiTi",
+        "Microsoft YaHei",
+        sans-serif;
+}
+
+
+/* 2. Larger subtitle, slightly taller header */
+
+.site-header {
+    min-height: 132px;
+    padding: 17px 22px 18px;
+    background: #FAF5E9;
+}
+
+.site-header h1 {
+    font-size: clamp(33px, 3vw, 41px);
+    letter-spacing: 0.8px;
+}
+
+.site-header p {
+    max-width: 900px;
+    margin-top: 9px;
+
+    font-family:
+        "LXGW WenKai",
+        "KaiTi",
+        "Microsoft YaHei",
+        sans-serif;
+
+    font-size: 15px;
+    line-height: 1.8;
+    letter-spacing: 0.1px;
+
+    color: #526B83;
+}
+
+/* The map gives some space back to the header */
+
+.map-experience {
+    height: calc(100vh - 132px);
+    min-height: 430px;
+}
+
+
+/* 3. Larger memory count */
+
+.memory-summary {
+    top: 20px;
+    left: 20px;
+    padding: 11px 16px;
+    gap: 12px;
+}
+
+.summary-label {
+    font-size: 14px;
+    color: #526B83;
+}
+
+.summary-number {
+    gap: 5px;
+}
+
+.summary-number strong {
+    font-size: 27px;
+    font-weight: 500;
+}
+
+.summary-number span {
+    font-size: 14px;
+}
+
+
+/* 4. Larger zoom and return-to-campus controls */
+
+.leaflet-control-zoom a,
+.home-control-button {
+    width: 39px !important;
+    height: 39px !important;
+    line-height: 39px !important;
+
+    font-size: 23px;
+}
+
+.home-control-button svg {
+    width: 21px;
+    height: 21px;
+}
+
+
+/* 5. Remove redundant interface instructions */
+
+/*
+   Keep the bottom-right map guidance.
+   Status feedback remains hidden when empty,
+   but appears temporarily during interactions.
+*/
+
+.map-guidance {
+    right: 20px;
+    bottom: 18px;
+    padding: 10px 13px;
+
+    font-size: 13px;
+    letter-spacing: 0;
+
+    opacity: 0.98;
+}
+
+.guidance-dot {
+    width: 7px;
+    height: 7px;
+}
+
+.status-message {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.status-message:empty {
+    display: none;
+}
+
+
+/* 6. Reading memory: story is the focus */
+
+.memory-popup .leaflet-popup-content {
+    margin: 19px 22px 21px;
+
+    min-width: 185px;
+    max-width: 280px;
+
+    font-family:
+        "LXGW WenKai",
+        "KaiTi",
+        "Microsoft YaHei",
+        sans-serif;
+
+    font-size: 16px;
+    line-height: 1.95;
+
+    color: #3C4038;
+}
+
+.memory-popup .leaflet-popup-content .memory-story p {
+    margin: 0;
+    padding: 0;
+
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.95;
+    letter-spacing: 0.2px;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Hide any stale title styling if present */
+
+.memory-popup .leaflet-popup-content .memory-story strong {
+    display: none;
+}
+
+
+/* 7. Larger writing interface text */
+
+.panel-heading h2 {
+    font-size: 23px;
+}
+
+.memory-panel label {
+    font-size: 15px;
+}
+
+.location-info span {
+    font-size: 13px;
+}
+
+.location-info strong {
+    font-size: 14px;
+}
+
+#memoryInput {
+    font-family:
+        "LXGW WenKai",
+        "KaiTi",
+        "Microsoft YaHei",
+        sans-serif;
+
+    font-size: 16px;
+    line-height: 30px;
+}
+
+#memoryInput::placeholder {
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.character-count,
+.error-message,
+.button-group button {
+    font-size: 14px;
+}
+
+
+/* 8. Responsive adjustments */
+
+@media (max-width: 650px) {
+
+    .site-header {
+        min-height: 146px;
+        padding: 15px 16px;
+    }
+
+    .site-header h1 {
+        font-size: 31px;
+    }
+
+    .site-header p {
+        max-width: 360px;
+        margin-top: 8px;
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .map-experience {
+        height: calc(100dvh - 146px);
+        min-height: 360px;
+    }
+
+    .memory-summary {
+        top: 12px;
+        left: 12px;
+        padding: 10px 12px;
+    }
+
+    .summary-label {
+        font-size: 12px;
+    }
+
+    .summary-number strong {
+        font-size: 23px;
+    }
+
+    .summary-number span {
+        font-size: 12px;
+    }
+
+    .leaflet-control-zoom a,
+    .home-control-button {
+        width: 37px !important;
+        height: 37px !important;
+        line-height: 37px !important;
+    }
+
+    .map-guidance {
+        right: 12px;
+        bottom: 12px;
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+
+    .memory-popup .leaflet-popup-content {
+        max-width: 235px;
+    }
+
+    .memory-popup .leaflet-popup-content .memory-story p {
+        font-size: 15px;
+    }
+}
