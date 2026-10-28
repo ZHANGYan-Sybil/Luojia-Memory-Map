@@ -596,6 +596,59 @@ For the current prototype, I chose to keep deletion under administrator control 
 
 [Describe whether the changes improved reading and whether any font sizes need further adjustment.]
 
+### Development Entry 14 — Solving Cross-Device Map Accessibility
+
+**Date:** 28 October 2026
+
+**Goal**
+
+Ensure that Luojia Memory Archive can be accessed and used reliably on different computers and mobile devices.
+
+**Problem Identified**
+
+After deploying the website through GitHub Pages, I tested the experience on another computer and a mobile phone.
+
+The website itself loaded successfully, and users could still view memory markers and access the shared Supabase database. However, the geographical map tiles remained blank on devices other than my development computer.
+
+This was a significant usability issue because visitors need to identify real locations before leaving their memories.
+
+**Investigation and Troubleshooting**
+
+I used the browser's developer tools to inspect map tile requests and compare their behavior across devices.
+
+On my development computer, OpenStreetMap tile requests returned HTTP 200 through a local proxy. On another computer, the requests failed, even though the browser sent an appropriate Referer header.
+
+I also tested another network connection using a mobile hotspot, but the original map tiles still failed to load on the affected device.
+
+These observations suggested that the problem was related to the accessibility of the external tile service, rather than the memory-saving logic or the Leaflet interaction itself.
+
+**Design and Technical Decision**
+
+Instead of rebuilding the map or changing the existing interaction, I decided to keep Leaflet and replace only the map tile provider.
+
+I compared alternative services, including OpenFreeMap and MapTiler. Although OpenFreeMap was accessible, I found its minimalist Positron style less suitable for this project because identifying specific campus buildings and paths was difficult.
+
+I therefore selected MapTiler Streets, which provides a more detailed geographical background and remains compatible with Leaflet.
+
+**Implementation**
+
+I replaced the original OpenStreetMap tile URL in the existing `L.tileLayer()` configuration with MapTiler Streets raster tiles.
+
+The changes preserved the existing map controls, geographical coordinates, memory markers, popups, and Supabase database interactions.
+
+**Testing and Result**
+
+After the change, the geographical map successfully loaded across the tested devices.
+
+The existing shared-memory experience remained available, while visitors could once again use geographical details to identify meaningful locations.
+
+**Reflection**
+
+This experience showed me that a website can function correctly while one of its external dependencies fails. Successful local testing does not necessarily mean that the same experience will work on another device or network.
+
+I also learned that the most appropriate solution is not always to rewrite the application. By separating Leaflet's interaction functionality from the external map tile service, I was able to address the accessibility issue with a small and targeted change.
+
+This was an important improvement in making the project more accessible and reproducible for the course assessment.
 
 ---
 

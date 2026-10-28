@@ -28,10 +28,6 @@
         </div>
         <button id="panelCloseButton" class="icon-close" type="button" aria-label="关闭书写窗口">×</button>
       </div>
-      <p class="location-info">
-        <span>你选择的位置</span>
-        <strong id="selectedLocation"></strong>
-      </p>
       <label for="memoryInput">我的记忆</label>
       <textarea id="memoryInput" maxlength="500" rows="6"
         placeholder="也许是那天樱花树下的笑靥如花，也许是那年凌波门上的把酒夜话……"></textarea>
@@ -47,6 +43,19 @@
   </main>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+          
+<!-- MapTiler SDK: vector map rendering -->
+<link
+    rel="stylesheet"
+    href="https://cdn.maptiler.com/maptiler-sdk-js/v3.9.0/maptiler-sdk.css"
+>
+
+<script src="https://cdn.maptiler.com/maptiler-sdk-js/v3.9.0/maptiler-sdk.umd.min.js"></script>
+
+<!-- MapTiler's official Leaflet adapter -->
+
+<!-- Official MapTiler Leaflet vector adapter -->
+<script src="https://cdn.maptiler.com/leaflet-maptilersdk/v4.1.0/leaflet-maptilersdk.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="script.js"></script>

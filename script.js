@@ -140,19 +140,34 @@
    Keep existing Leaflet interactions
 ========================================== */
 
-L.tileLayer(
-    "https://api.maptiler.com/maps/streets-v4/256/{z}/{x}/{y}.png?key=QP1m3O3Dp9GywfgbSNzj",
-    {
-        minZoom: 1,
-        maxZoom: 19,
 
-        attribution:
-            '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank" rel="noopener">MapTiler</a> ' +
-            '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>',
+/* ==========================================
+   WHU CUSTOM VECTOR MAP
+   MapTiler + Leaflet
+========================================== */
 
-        crossOrigin: true
-    }
-).addTo(map);
+
+/* ==========================================
+   WHU CUSTOM VECTOR MAP
+   Leaflet + MapTiler
+========================================== */
+
+const whuMapStyle =
+    "https://api.maptiler.com/maps/01a18123-2017-7deb-bfdc-693d0a4a2098/style.json";
+
+if (
+    !L.maptiler ||
+    typeof L.maptiler.maptilerLayer !== "function"
+) {
+    throw new Error(
+        "MapTiler Leaflet adapter has not loaded."
+    );
+}
+
+L.maptiler.maptilerLayer({
+    apiKey: "QP1m3O3Dp9GywfgbSNzj",
+    style: whuMapStyle
+}).addTo(map);
 
 
 // 3. SUPABASE CONNECTION
@@ -167,7 +182,6 @@ const db = supabase.createClient(
 // 4. GET PAGE ELEMENTS
 
 const memoryPanel = document.getElementById("memoryPanel");
-const selectedLocation = document.getElementById("selectedLocation");
 
 const memoryInput = document.getElementById("memoryInput");
 const characterCount = document.getElementById("characterCount");
@@ -232,11 +246,6 @@ map.on("click", function (event) {
 
     // Create the circular plus button
     createAddButton(selectedLatLng);
-
-    // Update location text
-    selectedLocation.textContent =
-        selectedLatLng.lat.toFixed(5) + ", " +
-        selectedLatLng.lng.toFixed(5);
 
     // The writing panel opens only after clicking +
     memoryPanel.classList.add("hidden");
@@ -319,9 +328,9 @@ memoryInput.addEventListener("input", function () {
     characterCount.textContent = currentLength;
 
     if (currentLength >= 450) {
-        characterCount.style.color = "#115740";
+        characterCount.style.color = "#E10800";
     } else {
-        characterCount.style.color = "#115740";
+        characterCount.style.color = "#002554";
     }
 
     errorMessage.textContent = "";
@@ -518,7 +527,7 @@ async function loadMemories() {
 // 15. DISPLAY SAVED MEMORY MARKERS
 // =====================================
 
-// Campus-green archival pin icon
+// WHU-green archival pin, no enamel highlight arc
 const savedMemoryIcon = L.divIcon({
     className: "saved-memory-marker",
 
@@ -535,7 +544,7 @@ const savedMemoryIcon = L.divIcon({
                 cy="48"
                 rx="11"
                 ry="3"
-                fill="#002554"
+                fill="#115740"
                 opacity="0.18"
             />
 
@@ -553,14 +562,6 @@ const savedMemoryIcon = L.divIcon({
                    A14 14 0 1 1 34 18
                    C34 25 26 33 20 43Z"
                 fill="#115740"
-            />
-
-            <path
-                d="M12 13 Q16 7 22 10"
-                stroke="#8FC0A5"
-                stroke-width="2.5"
-                fill="none"
-                stroke-linecap="round"
             />
 
             <circle
@@ -642,7 +643,7 @@ function clearSelection() {
 
     memoryInput.value = "";
     characterCount.textContent = "0";
-    characterCount.style.color = "#115740";
+    characterCount.style.color = "#002554";
 
     errorMessage.textContent = "";
 

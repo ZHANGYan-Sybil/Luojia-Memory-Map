@@ -9,9 +9,11 @@
   --navy: #002554;
   --green: #115740;
   --green-dark: #0B4130;
-  --green-light: #337D63;
+  --green-light: #00797C;
   --green-pale: #E9F0E8;
   --gold: #FFA300;
+  --lake-blue: #41B6E6;
+  --cherry-pink: #F8A3BC;
   --paper: #FFF9ED;
   --paper-light: #FFFCF6;
   --line-gold: rgba(255, 163, 0, .40);
@@ -34,11 +36,11 @@ button:focus-visible, a:focus-visible {
 .site-header {
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 192px;
-  padding: 16px 22px 58px;
+  justify-content: center;
+  height: 166px;
+  min-height: 166px;
+  padding: 12px 22px;
   text-align: center;
   background-color: #FFFCF6;
   background-image: url("assets/whu-header.png");
@@ -50,21 +52,26 @@ button:focus-visible, a:focus-visible {
 .site-header h1 {
   margin: 0;
   font-family: var(--font);
-  font-size: clamp(33px, 3vw, 41px);
-  line-height: 1.35;
-  letter-spacing: .9px;
-  font-weight: 500;
+  font-size: clamp(38px, 3.15vw, 46px);
+  line-height: 1.2;
+  letter-spacing: 1px;
+  font-weight: 600;
   color: var(--navy);
-  text-shadow: 0 1px 0 rgba(255,255,255,.85);
+  text-shadow: 0 1px 0 rgba(255,255,255,.9);
 }
 .site-header p {
-  max-width: 860px;
-  margin: 8px 0 0;
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 9px;
+  max-width: 920px;
+  margin: 0 auto;
   font-size: 15px;
-  line-height: 1.75;
+  line-height: 1.45;
   letter-spacing: .15px;
   color: var(--navy);
-  text-shadow: 0 1px 0 rgba(255,255,255,.90);
+  font-weight: 400;
+  text-shadow: 0 1px 0 rgba(255,255,255,.92);
 }
 
 /* Map geometry stays untouched; page occupies the remaining viewport. */
@@ -72,14 +79,19 @@ button:focus-visible, a:focus-visible {
   position: relative;
   isolation: isolate;
   width: 100%;
-  height: calc(100vh - 192px);
-  height: calc(100dvh - 192px);
+  height: calc(100vh - 166px);
+  height: calc(100dvh - 166px);
   min-height: 430px;
   overflow: hidden;
 }
 #map { width: 100%; height: 100%; background: #E9F0E8; }
 /* Keep the original geodata readable; avoid altering tile hues. */
-.leaflet-tile-pane { filter: none; }
+/* Mildly warm the complete raster map without darkening or obscuring labels.
+   Raster CSS cannot recolor water alone; MapTiler style editing can. */
+/* Preserve the exact colors of the custom WHU map */
+.leaflet-tile-pane {
+    filter: none;
+}
 
 /* Small floating archive label */
 .memory-summary {
@@ -104,7 +116,7 @@ button:focus-visible, a:focus-visible {
 .summary-number strong {
   font-size: 27px;
   font-weight: 500;
-  color: var(--green);
+  color: var(--navy);
 }
 .summary-number span { font-size: 14px; color: var(--navy); }
 
@@ -159,19 +171,6 @@ button:focus-visible, a:focus-visible {
   cursor: pointer;
 }
 .icon-close:hover { background: var(--green-pale); }
-.location-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 0 0 17px;
-  padding: 10px 13px;
-  background: rgba(17,87,64,.055);
-  border-left: 2px solid var(--green);
-  color: var(--navy);
-  line-height: 1.55;
-}
-.location-info span { color: var(--green); font-size: 13px; }
-.location-info strong { color: var(--navy); font-size: 14px; font-weight: 500; overflow-wrap: anywhere; }
 .memory-panel label { display: block; margin-bottom: 9px; font-size: 15px; font-weight: 500; }
 
 /* Notebook paper: 32px text line-height = 32px ruling interval.
@@ -217,7 +216,7 @@ button:focus-visible, a:focus-visible {
 }
 .character-count {
   margin: 5px 0 13px;
-  color: var(--green);
+  color: var(--navy);
   font-size: 13px;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -325,7 +324,7 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   font-size: 12px;
   pointer-events: none;
 }
-.guidance-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; }
+.guidance-dot { width: 7px; height: 7px; background: var(--gold); border-radius: 50%; }
 
 /* Existing temporary selection and add button */
 .selection-dot {
@@ -406,21 +405,29 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 /* Responsive: keep words legible and show illustration along header bottom */
 @media (max-width: 650px) {
   .site-header {
-    min-height: 174px;
-    padding: 12px 14px 67px;
-    background-size: auto 120px;
+    height: 156px;
+    min-height: 156px;
+    padding: 9px 12px;
+    background-size: auto 117px;
     background-position: center bottom;
-  }
-  .site-header h1 { font-size: 30px; line-height: 1.35; }
+}
+  .site-header h1 {
+    font-size: 33px;
+    line-height: 1.2;
+    font-weight: 600;
+}
   .site-header p {
-    max-width: 360px;
-    margin-top: 6px;
+    left: 11px;
+    right: 11px;
+    bottom: 7px;
+    max-width: 365px;
     font-size: 12px;
-    line-height: 1.7;
-  }
+    line-height: 1.4;
+    font-weight: 400;
+}
   .map-experience {
-    height: calc(100vh - 174px);
-    height: calc(100dvh - 174px);
+    height: calc(100vh - 156px);
+    height: calc(100dvh - 156px);
     min-height: 360px;
   }
   .memory-summary { top: 11px; left: 11px; padding: 8px 10px; gap: 8px; }
@@ -452,4 +459,87 @@ button:disabled { opacity: .55; cursor: not-allowed; }
     animation-duration: .01ms !important;
     transition-duration: .01ms !important;
   }
+}
+
+/* ==========================================
+   ROUND 5B — FINAL TYPOGRAPHY & PLUS ALIGNMENT
+   Luojia Memory Archive
+========================================== */
+
+/* 1. Main title: slightly wider letter spacing */
+
+.site-header h1 {
+    letter-spacing: 1.8px;
+}
+
+
+/* 2. Subtitle: move up and use neutral grey */
+
+.site-header p {
+    bottom: 15px;
+    color: #777777;
+}
+
+
+/* 3. Add-memory button: precisely centered plus */
+
+/* Keep the original circular button and its colors */
+
+.add-memory-button {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Hide the original text glyph */
+    font-size: 0;
+    line-height: 1;
+}
+
+/* Draw the plus using centered horizontal and vertical lines */
+
+.add-memory-button::before,
+.add-memory-button::after {
+    content: "";
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    background: #FFFFFF;
+    border-radius: 1px;
+
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+/* Horizontal stroke */
+
+.add-memory-button::before {
+    width: 16px;
+    height: 2.5px;
+}
+
+/* Vertical stroke */
+
+.add-memory-button::after {
+    width: 2.5px;
+    height: 16px;
+}
+
+
+/* 4. Mobile adjustments */
+
+@media (max-width: 650px) {
+
+    .site-header h1 {
+        letter-spacing: 1.4px;
+    }
+
+    .site-header p {
+        bottom: 13px;
+        color: #777777;
+    }
+
 }
