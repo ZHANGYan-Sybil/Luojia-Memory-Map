@@ -59,44 +59,21 @@ The Home button returns the map to its original campus view.
 - **Supabase:** Cloud storage for shared memories.
 - **GitHub Pages:** Public website hosting.
 
-## How to Run Locally
+## How to Run
 
-### Requirements
+### Online (Recommended)
 
-- A modern web browser
-- An internet connection
-- Visual Studio Code with the Live Server extension, or another local HTTP server
-- Valid MapTiler and Supabase configuration
+Visit the Luojia Memory Map website to explore the map and leave memories directly in your browser. No installation is required.
 
-### Steps
+### Locally
 
-**1. Clone the repository**
+Clone or download this repository.
+Open the project folder in Visual Studio Code.
+Ensure config.js contains valid public MapTiler and Supabase configuration.
+Open index.html using the Live Server extension.
+Test the main interaction in your browser.
 
-```bash
-git clone https://github.com/ZHANGYan-Sybil/Luojia-Memory-Map.git
-```
-
-**2. Open the project folder**
-
-```bash
-cd Luojia-Memory-Map
-```
-
-**3. Check the configuration**
-
-The project uses `config.js` for browser-side service configuration.
-
-Ensure that the MapTiler API key and Supabase public configuration are valid.
-
-Do not include secret or service-role keys in client-side code.
-
-**4. Start the website**
-
-Open `index.html` in Visual Studio Code and select **Open with Live Server**.
-
-The browser will open the local website.
-
-The map and shared memories require an internet connection.
+An internet connection is required to load the map and access shared memories.
 
 ## Known Limitations
 
