@@ -134,12 +134,23 @@
 // If you previously used a different working tile
 // provider, preserve that provider and attribution.
 
+
+/* ==========================================
+   Base map — MapTiler Streets
+   Keep existing Leaflet interactions
+========================================== */
+
 L.tileLayer(
-    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "https://api.maptiler.com/maps/streets-v4/256/{z}/{x}/{y}.png?key=QP1m3O3Dp9GywfgbSNzj",
     {
+        minZoom: 1,
         maxZoom: 19,
+
         attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            '&copy; <a href="https://www.maptiler.com/copyright/" target="_blank" rel="noopener">MapTiler</a> ' +
+            '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>',
+
+        crossOrigin: true
     }
 ).addTo(map);
 
