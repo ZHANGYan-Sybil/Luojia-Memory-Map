@@ -1,1591 +1,455 @@
-
-/* =========================================
-   Luojia Memory Map
-   Visual Redesign — Round 1
-========================================= */
+/* ==========================================================
+   LUOJIA MEMORY ARCHIVE — CAMPUS EDITION
+   Consolidated visual system, 28 October 2026
+   Only presentation is changed; Leaflet/Supabase stay intact.
+   Palette: WHU navy, campus green, restrained golden details.
+   ========================================================== */
 
 :root {
-    --paper: #F0E5CC;
-    --sand: #C7B58A;
-    --red: #B85C45;
-    --blue: #526B83;
-    --ink: #3C4038;
-
-    --white-paper: #FFF9ED;
-    --line: rgba(60, 64, 56, 0.14);
-
-    --font-title: "LXGW WenKai", "KaiTi", serif;
-    --font-body: "Source Han Sans SC",
-                 "Noto Sans CJK SC",
-                 "Microsoft YaHei",
-                 sans-serif;
+  --navy: #002554;
+  --green: #115740;
+  --green-dark: #0B4130;
+  --green-light: #337D63;
+  --green-pale: #E9F0E8;
+  --gold: #FFA300;
+  --paper: #FFF9ED;
+  --paper-light: #FFFCF6;
+  --line-gold: rgba(255, 163, 0, .40);
+  --shadow: rgba(0, 37, 84, .13);
+  --font: "LXGW WenKai", "KaiTi", "Microsoft YaHei", sans-serif;
 }
 
-* {
-    box-sizing: border-box;
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; width: 100%; }
+body { color: var(--navy); background: var(--paper); font-family: var(--font); }
+button, textarea, input { font-family: var(--font); }
+button { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
 }
 
-html,
-body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-}
-
-body {
-    font-family: var(--font-body);
-    color: var(--ink);
-    background: var(--paper);
-}
-
-/* Header */
-
+/* The user-provided campus illustration is kept as a local asset.
+   Use bottom anchoring to preserve the architecture strip. */
 .site-header {
-    min-height: 110px;
-    padding: 17px 24px 15px;
-    text-align: center;
-    background: var(--paper);
-    border-bottom: 1px solid var(--sand);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 192px;
+  padding: 16px 22px 58px;
+  text-align: center;
+  background-color: #FFFCF6;
+  background-image: url("assets/whu-header.png");
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  border: 0;
 }
-
 .site-header h1 {
-    margin: 0;
-    font-family: var(--font-title);
-    font-size: clamp(29px, 3vw, 39px);
-    font-weight: 500;
-    letter-spacing: 3px;
-    line-height: 1.45;
+  margin: 0;
+  font-family: var(--font);
+  font-size: clamp(33px, 3vw, 41px);
+  line-height: 1.35;
+  letter-spacing: .9px;
+  font-weight: 500;
+  color: var(--navy);
+  text-shadow: 0 1px 0 rgba(255,255,255,.85);
 }
-
 .site-header p {
-    margin: 7px 0 0;
-    font-size: 13px;
-    color: var(--blue);
-    line-height: 1.7;
+  max-width: 860px;
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.75;
+  letter-spacing: .15px;
+  color: var(--navy);
+  text-shadow: 0 1px 0 rgba(255,255,255,.90);
 }
 
-/* Map layout */
-
+/* Map geometry stays untouched; page occupies the remaining viewport. */
 .map-experience {
-    position: relative;
-    width: 100%;
-    height: calc(100vh - 110px);
-    min-height: 480px;
-    isolation: isolate;
-    overflow: hidden;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: calc(100vh - 192px);
+  height: calc(100dvh - 192px);
+  min-height: 430px;
+  overflow: hidden;
 }
+#map { width: 100%; height: 100%; background: #E9F0E8; }
+/* Keep the original geodata readable; avoid altering tile hues. */
+.leaflet-tile-pane { filter: none; }
 
-#map {
-    width: 100%;
-    height: 100%;
-    background: #E6E8DC;
-}
-
-/* Memory counter */
-
+/* Small floating archive label */
 .memory-summary {
-    position: absolute;
-    top: 24px;
-    left: 24px;
-    z-index: 800;
-
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    padding: 12px 17px;
-    background: rgba(255, 249, 237, 0.96);
-    border: 1px solid var(--sand);
-    border-radius: 10px;
-
-    box-shadow: 0 7px 22px rgba(60, 64, 56, 0.12);
-    pointer-events: none;
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 252, 246, .96);
+  border: 0;
+  border-left: 2px solid var(--gold);
+  border-radius: 3px;
+  box-shadow: 0 2px 12px var(--shadow);
+  pointer-events: none;
+  color: var(--navy);
 }
-
-.summary-label {
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.summary-number {
-    display: flex;
-    align-items: baseline;
-    gap: 5px;
-    color: var(--red);
-}
-
+.summary-label { font-size: 14px; }
+.summary-number { display: flex; align-items: baseline; gap: 5px; }
 .summary-number strong {
-    font-family: var(--font-title);
-    font-size: 25px;
+  font-size: 27px;
+  font-weight: 500;
+  color: var(--green);
 }
+.summary-number span { font-size: 14px; color: var(--navy); }
 
-.summary-number span {
-    font-size: 12px;
-}
-
-/* Writing panel */
-
+/* Handwritten memory panel */
 .memory-panel {
-    position: absolute;
-    z-index: 1100;
-
-    top: 24px;
-    right: 24px;
-
-    width: min(390px, calc(100% - 48px));
-    max-height: calc(100% - 48px);
-    overflow-y: auto;
-
-    padding: 25px;
-
-    background: var(--white-paper);
-    border: 1px solid var(--sand);
-    border-radius: 8px;
-
-    box-shadow:
-        0 16px 40px rgba(60, 64, 56, 0.18),
-        0 2px 5px rgba(60, 64, 56, 0.05);
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 1100;
+  width: min(425px, calc(100% - 36px));
+  max-height: calc(100% - 36px);
+  overflow-y: auto;
+  padding: 23px 24px;
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(
+    0deg, rgba(17,87,64,.012) 0 1px, transparent 1px 6px
+  );
+  border: 0;
+  border-top: 2px solid var(--gold);
+  border-radius: 3px;
+  box-shadow: 0 5px 17px rgba(0,37,84,.10), 0 19px 47px rgba(0,37,84,.16);
 }
-
-/* Important: panel must stay hidden until requested */
-
-.memory-panel.hidden {
-    display: none;
-}
-
+.memory-panel.hidden { display: none; }
 .panel-heading {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--line-gold);
 }
-
-.eyebrow {
-    font-size: 10px;
-    letter-spacing: 1.8px;
-    color: var(--blue);
-}
-
+.eyebrow { color: var(--green-light); font-size: 11px; letter-spacing: 1.4px; }
 .panel-heading h2 {
-    margin: 8px 0 0;
-    font-family: var(--font-title);
-    font-weight: 500;
-    font-size: 23px;
-    line-height: 1.5;
+  margin: 7px 0 0;
+  color: var(--navy);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.5;
+  letter-spacing: 0;
 }
-
 .icon-close {
-    flex-shrink: 0;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-
-    background: transparent;
-    color: var(--ink);
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  color: var(--green);
+  border: 0;
+  border-radius: 50%;
+  font-size: 25px;
+  cursor: pointer;
 }
-
-/* Selected location */
-
+.icon-close:hover { background: var(--green-pale); }
 .location-info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-
-    margin: 0 0 19px;
-    padding: 12px 14px;
-
-    background: rgba(199, 181, 138, 0.18);
-    border-left: 3px solid var(--sand);
-    border-radius: 4px;
-    font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 17px;
+  padding: 10px 13px;
+  background: rgba(17,87,64,.055);
+  border-left: 2px solid var(--green);
+  color: var(--navy);
+  line-height: 1.55;
 }
+.location-info span { color: var(--green); font-size: 13px; }
+.location-info strong { color: var(--navy); font-size: 14px; font-weight: 500; overflow-wrap: anywhere; }
+.memory-panel label { display: block; margin-bottom: 9px; font-size: 15px; font-weight: 500; }
 
-.location-info span {
-    color: var(--blue);
-}
-
-.location-info strong {
-    font-weight: 500;
-}
-
-/* Writing area */
-
-.memory-panel label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 14px;
-    font-weight: 600;
-}
-
+/* Notebook paper: 32px text line-height = 32px ruling interval.
+   Background scrolls with the textarea's own content. */
 #memoryInput {
-    display: block;
-    width: 100%;
-    min-height: 175px;
-    padding: 13px 15px;
-
-    background-color: #FFFCF5;
-    color: var(--ink);
-
-    border: 1px solid #B6C7D2;
-    border-radius: 5px;
-
-    font-family: var(--font-body);
-    font-size: 14px;
-    line-height: 28px;
-
-    resize: vertical;
+  display: block;
+  width: 100%;
+  min-height: 204px;
+  padding: 9px 14px;
+  background-color: var(--paper-light);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 30px,
+    rgba(17,87,64,.16) 30px,
+    rgba(17,87,64,.16) 31px,
+    transparent 31px,
+    transparent 32px
+  );
+  background-position: 0 9px;
+  background-origin: padding-box;
+  background-attachment: local;
+  border: 1px solid rgba(255,163,0,.40);
+  border-radius: 2px;
+  color: var(--navy);
+  font-size: 16px;
+  line-height: 32px;
+  letter-spacing: .1px;
+  resize: vertical;
+  box-shadow: none;
 }
-
+#memoryInput::placeholder {
+  font-family: inherit;
+  color: #597569;
+  opacity: .86;
+  font-size: 15px;
+  line-height: 32px;
+}
 #memoryInput:focus {
-    outline: 2px solid rgba(82, 107, 131, 0.3);
-    border-color: var(--blue);
+  outline: 1px solid var(--gold);
+  outline-offset: 1px;
+  border-color: var(--gold);
 }
-
 .character-count {
-    margin: 6px 0 14px;
-    font-size: 12px;
-    color: var(--blue);
-    text-align: right;
+  margin: 5px 0 13px;
+  color: var(--green);
+  font-size: 13px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
+.error-message { color: #A34428; font-size: 13px; line-height: 1.6; }
+.error-message:empty { display: none; }
 
-/* Buttons */
-
-.button-group {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
+.button-group { display: flex; justify-content: flex-end; gap: 10px; }
 .button-group button {
-    min-height: 39px;
-    padding: 10px 17px;
-
-    border: 1px solid transparent;
-    border-radius: 5px;
-
-    font-family: inherit;
-    font-size: 13px;
-
-    cursor: pointer;
+  min-height: 41px;
+  padding: 9px 16px;
+  border-radius: 3px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color .16s ease, color .16s ease;
 }
-
 .cancel-button {
-    background: #E9DFC9;
-    color: var(--ink);
+  color: var(--green);
+  background: transparent;
+  border: 1px solid var(--line-gold);
 }
-
+.cancel-button:hover:not(:disabled) { background: var(--green-pale); }
 .save-button {
-    background: var(--red);
-    color: #FFFFFF;
+  color: #fff;
+  background: var(--green);
+  border: 1px solid var(--green);
 }
+.save-button:hover:not(:disabled) { background: var(--green-dark); }
+button:disabled { opacity: .55; cursor: not-allowed; }
 
-.save-button:hover:not(:disabled) {
-    background: #9D4B39;
-}
-
-button:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
-/* Error and status */
-
-.error-message {
-    color: #A23F36;
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-.error-message:empty {
-    display: none;
-}
-
-.status-message {
-    position: absolute;
-    left: 50%;
-    bottom: 24px;
-    z-index: 850;
-
-    transform: translateX(-50%);
-
-    max-width: min(620px, calc(100% - 40px));
-    padding: 11px 17px;
-
-    background: rgba(255, 249, 237, 0.97);
-    border: 1px solid var(--sand);
-    border-radius: 8px;
-
-    box-shadow: 0 5px 20px rgba(60, 64, 56, 0.13);
-
-    text-align: center;
-    font-size: 12px;
-    line-height: 1.5;
-    pointer-events: none;
-}
-
-.status-message:empty {
-    display: none;
-}
-
-.map-guidance {
-    position: absolute;
-    right: 24px;
-    bottom: 24px;
-    z-index: 800;
-
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    padding: 10px 14px;
-
-    background: rgba(255, 249, 237, 0.95);
-    border: 1px solid var(--sand);
-    border-radius: 8px;
-
-    color: var(--blue);
-    font-size: 12px;
-
-    pointer-events: none;
-}
-
-.guidance-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--red);
-    border-radius: 50%;
-}
-
-/* Temporary marker and plus button */
-
-.selection-dot {
-    width: 17px;
-    height: 17px;
-
-    background: var(--red);
-    border: 3px solid #FFF9ED;
-    border-radius: 50%;
-
-    box-shadow:
-        0 0 0 3px rgba(184, 92, 69, 0.25),
-        0 3px 8px rgba(60, 64, 56, 0.25);
-}
-
-.add-memory-button {
-    width: 39px;
-    height: 39px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: var(--red);
-    color: #FFFFFF;
-
-    border: 3px solid #FFF9ED;
-    border-radius: 50%;
-
-    box-shadow: 0 4px 12px rgba(60, 64, 56, 0.28);
-
-    font-size: 25px;
-    line-height: 1;
-    cursor: pointer;
-}
-
-.add-memory-button:hover {
-    background: #9D4B39;
-}
-
-.add-memory-button:focus-visible {
-    outline: 3px solid var(--blue);
-    outline-offset: 3px;
-}
-
-/* Avoid oversized default icon styling */
-
-.selection-marker,
-.add-button-marker {
-    background: transparent;
-    border: none;
-}
-
-/* Leaflet controls */
-
-.leaflet-control-zoom a {
-    color: var(--ink);
-}
-
-/* Responsive layout */
-
-@media (max-width: 650px) {
-
-    .site-header {
-        min-height: 100px;
-        padding: 16px 15px;
-    }
-
-    .site-header h1 {
-        font-size: 29px;
-    }
-
-    .site-header p {
-        font-size: 11px;
-    }
-
-    .map-experience {
-        height: calc(100dvh - 100px);
-        min-height: 420px;
-    }
-
-    .memory-summary {
-        top: 12px;
-        left: 12px;
-        padding: 9px 11px;
-        gap: 10px;
-    }
-
-    .summary-label {
-        font-size: 11px;
-    }
-
-    .summary-number strong {
-        font-size: 20px;
-    }
-
-    .memory-panel {
-        top: 12px;
-        right: 12px;
-        width: calc(100% - 24px);
-        max-height: calc(100% - 24px);
-        padding: 19px;
-    }
-
-    .status-message {
-        bottom: 60px;
-        font-size: 11px;
-    }
-
-    .map-guidance {
-        bottom: 12px;
-        right: 12px;
-        font-size: 10px;
-    }
-}
-
-/* Reduced motion */
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-    }
-}
-
-/* =====================================
-   Home control - Return to campus
-===================================== */
-
-.home-control {
-    margin-top: 8px !important;
-}
-
-.home-control-button {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-
-    width: 34px !important;
-    height: 34px !important;
-
-    background: #FFF9ED !important;
-    color: #3C4038 !important;
-
-    cursor: pointer;
-}
-
-.home-control-button:hover {
-    background: #F0E5CC !important;
-    color: #B85C45 !important;
-}
-
-.home-control-button svg {
-    display: block;
-}
-
-.home-control-button:focus-visible {
-    outline: 3px solid #526B83;
-    outline-offset: 2px;
-}
-
-/* Visual Experiment: Soft Vintage Map */
-
-
-.leaflet-tile-pane {
-    filter: saturate(0.82)
-            contrast(1.01)
-            brightness(1.04)
-            sepia(0.03);
-}
-  
-
-/* =====================================
-   Typography Refinement - Round 2
-===================================== */
-
-/* Main title: more elegant and less spaced */
-
-.site-header {
-    min-height: 96px;
-    padding: 12px 24px 11px;
-}
-
-.site-header h1 {
-    font-family: "LXGW WenKai", "KaiTi", serif;
-    font-size: clamp(31px, 2.7vw, 38px);
-    font-weight: 400;
-    letter-spacing: 1px;
-    line-height: 1.4;
-}
-
-.site-header p {
-    margin-top: 4px;
-    font-family:
-        "Source Han Sans SC",
-        "Noto Sans CJK SC",
-        "Microsoft YaHei",
-        sans-serif;
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 0.3px;
-    line-height: 1.6;
-}
-
-/* Keep the map aligned with the shorter header */
-
-.map-experience {
-    height: calc(100vh - 96px);
-}
-
-/* More understated UI text */
-
-.memory-summary,
-.map-guidance,
-.status-message,
-.memory-panel {
-    font-family:
-        "Source Han Sans SC",
-        "Noto Sans CJK SC",
-        "Microsoft YaHei",
-        sans-serif;
-}
-
-.memory-summary {
-    padding: 10px 14px;
-}
-
-.summary-label {
-    font-size: 12px;
-}
-
-.summary-number strong {
-    font-size: 21px;
-}
-
-/* Slightly smaller guidance text */
-
-.map-guidance {
-    font-size: 11px;
-    opacity: 0.94;
-}
-
-/* Mobile adjustment */
-
-@media (max-width: 650px) {
-    .site-header {
-        min-height: 96px;
-        padding: 12px 15px;
-    }
-
-    .site-header h1 {
-        font-size: 29px;
-    }
-
-    .site-header p {
-        font-size: 11px;
-    }
-
-    .map-experience {
-        height: calc(100dvh - 96px);
-    }
-}
-
-
-/* =====================================
-   Saved Memory Pin - Round 2
-===================================== */
-
-.saved-memory-marker {
-    background: transparent;
-    border: none;
-}
-
-.saved-memory-marker svg {
-    display: block;
-    overflow: visible;
-    filter: drop-shadow(
-        0 2px 2px rgba(60, 64, 56, 0.18)
-    );
-}
-
-.saved-memory-marker:hover svg {
-    filter: drop-shadow(
-        0 3px 5px rgba(60, 64, 56, 0.28)
-    );
-}
-
-
-/* ==========================================
-   ROUND 2B — PAPER INTERFACE DESIGN
-   Reading popup + Writing panel + Small UI
-========================================== */
-
-
-/* 1. A quieter floating memory counter */
-
-.memory-summary {
-    padding: 11px 16px;
-    gap: 12px;
-
-    background: rgba(255, 249, 237, 0.95);
-    border: 1px solid rgba(199, 181, 138, 0.72);
-    border-radius: 5px;
-
-    box-shadow:
-        0 3px 12px rgba(60, 64, 56, 0.11);
-}
-
-.summary-label {
-    color: #526B83;
-    font-size: 12px;
-    letter-spacing: 0.2px;
-}
-
-.summary-number strong {
-    color: #B85C45;
-    font-size: 21px;
-}
-
-
-/* 2. The writing panel resembles aged stationery */
-
-.memory-panel {
-    background-color: #FFF9ED;
-
-    background-image:
-        repeating-linear-gradient(
-            0deg,
-            rgba(82, 107, 131, 0.012) 0px,
-            rgba(82, 107, 131, 0.012) 1px,
-            transparent 1px,
-            transparent 5px
-        );
-
-    border: 1px solid #C7B58A;
-    border-radius: 4px;
-
-    box-shadow:
-        0 2px 2px rgba(60, 64, 56, 0.05),
-        0 8px 25px rgba(60, 64, 56, 0.13),
-        0 22px 45px rgba(60, 64, 56, 0.08);
-}
-
-.panel-heading {
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(199, 181, 138, 0.55);
-}
-
-.eyebrow {
-    color: #526B83;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-}
-
-.panel-heading h2 {
-    font-family: "LXGW WenKai", "KaiTi", serif;
-    font-size: 24px;
-    font-weight: 400;
-    color: #3C4038;
-    letter-spacing: 0.3px;
-}
-
-.icon-close {
-    color: #526B83;
-    border-radius: 50%;
-}
-
-.icon-close:hover:not(:disabled) {
-    color: #B85C45;
-    background: rgba(199, 181, 138, 0.18);
-}
-
-
-/* 3. A little archival label for the coordinates */
-
-.location-info {
-    background: rgba(240, 229, 204, 0.6);
-    border-left: 2px solid #B85C45;
-    border-radius: 0;
-
-    padding: 12px 14px;
-    line-height: 1.6;
-}
-
-.location-info span {
-    color: #526B83;
-    font-size: 11px;
-}
-
-.location-info strong {
-    color: #3C4038;
-    font-size: 13px;
-    letter-spacing: 0.4px;
-}
-
-
-/* 4. Notebook writing area */
-
-#memoryInput {
-    background-color: #FFFDF7;
-
-    background-image:
-        repeating-linear-gradient(
-            to bottom,
-            transparent 0px,
-            transparent 27px,
-            rgba(82, 107, 131, 0.20) 27px,
-            rgba(82, 107, 131, 0.20) 28px
-        );
-
-    background-attachment: local;
-
-    border: 1px solid rgba(82, 107, 131, 0.45);
-    border-radius: 2px;
-
-    padding: 8px 14px;
-    line-height: 28px;
-
-    color: #3C4038;
-
-    box-shadow:
-        inset 0 1px 4px rgba(60, 64, 56, 0.035);
-}
-
-#memoryInput::placeholder {
-    color: #7A858A;
-    opacity: 0.85;
-}
-
-#memoryInput:focus {
-    outline: 2px solid rgba(82, 107, 131, 0.18);
-    outline-offset: 1px;
-    border-color: #526B83;
-}
-
-
-/* 5. More refined buttons */
-
-.button-group button {
-    border-radius: 3px;
-    font-size: 13px;
-    letter-spacing: 0.3px;
-
-    transition:
-        background-color 0.15s ease,
-        box-shadow 0.15s ease;
-}
-
-.cancel-button {
-    background: transparent;
-    border: 1px solid #C7B58A !important;
-    color: #526B83;
-}
-
-.cancel-button:hover:not(:disabled) {
-    background: #F0E5CC;
-}
-
-.save-button {
-    background: #B85C45;
-    color: #FFFFFF;
-    border: 1px solid #B85C45 !important;
-}
-
-.save-button:hover:not(:disabled) {
-    background: #A24D39;
-    box-shadow: 0 3px 9px rgba(184, 92, 69, 0.17);
-}
-
-
-/* 6. Vintage paper popup for saved memories */
-
+/* Popup keeps readable long-form stories without repeated generic titles */
 .memory-popup .leaflet-popup-content-wrapper {
-    position: relative;
-
-    background-color: #FFF8E8;
-
-    background-image:
-        repeating-linear-gradient(
-            0deg,
-            rgba(199, 181, 138, 0.035) 0px,
-            rgba(199, 181, 138, 0.035) 1px,
-            transparent 1px,
-            transparent 6px
-        );
-
-    color: #3C4038;
-
-    border: 1px solid #C7B58A;
-    border-radius: 3px;
-
-    box-shadow:
-        2px 3px 0 rgba(199, 181, 138, 0.25),
-        0 9px 24px rgba(60, 64, 56, 0.20);
+  background: #FFF9ED;
+  background-image: repeating-linear-gradient(
+    0deg, rgba(17,87,64,.012) 0 1px, transparent 1px 6px
+  );
+  border: 0;
+  border-top: 2px solid var(--gold);
+  border-radius: 2px;
+  box-shadow: 2px 3px 0 rgba(255,163,0,.12), 0 9px 22px rgba(0,37,84,.17);
+  color: var(--navy);
 }
-
 .memory-popup .leaflet-popup-content {
-    margin: 21px 20px 18px;
-    min-width: 175px;
-    max-width: 260px;
-
-    font-family:
-        "Source Han Sans SC",
-        "Noto Sans CJK SC",
-        "Microsoft YaHei",
-        sans-serif;
-
-    font-size: 13px;
-    line-height: 1.85;
+  margin: 19px 21px 20px;
+  min-width: 185px;
+  max-width: 280px;
+  color: var(--navy);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.95;
 }
-
-.memory-popup .leaflet-popup-content strong {
-    display: block;
-
-    margin-bottom: 12px;
-    padding-bottom: 9px;
-
-    border-bottom: 1px solid rgba(199, 181, 138, 0.65);
-
-    font-family: "LXGW WenKai", "KaiTi", serif;
-    font-size: 17px;
-    font-weight: 400;
-
-    color: #3C4038;
-}
-
-.memory-popup .leaflet-popup-content p {
-    margin: 0;
-
-    color: #3C4038;
-    line-height: 1.9;
-
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-}
-
-.memory-popup .leaflet-popup-tip {
-    background: #FFF8E8;
-    border: 1px solid rgba(199, 181, 138, 0.45);
-    box-shadow: 2px 2px 6px rgba(60, 64, 56, 0.08);
-}
-
-.memory-popup .leaflet-popup-close-button {
-    color: #526B83 !important;
-    font-size: 20px !important;
-}
-
-.memory-popup .leaflet-popup-close-button:hover {
-    color: #B85C45 !important;
-}
-
-
-/* 7. Reduce decorative interference */
-
-.map-guidance {
-    background: rgba(255, 249, 237, 0.90);
-    border: 1px solid rgba(199, 181, 138, 0.7);
-    border-radius: 4px;
-
-    box-shadow: 0 2px 9px rgba(60, 64, 56, 0.06);
-}
-
-.status-message {
-    background: rgba(255, 249, 237, 0.97);
-    border: 1px solid rgba(199, 181, 138, 0.75);
-    border-radius: 4px;
-}
-
-
-/* 8. Preserve usability on small screens */
-
-@media (max-width: 650px) {
-
-    .memory-panel {
-        padding: 18px;
-    }
-
-    .panel-heading h2 {
-        font-size: 21px;
-    }
-
-    .memory-popup .leaflet-popup-content {
-        min-width: 130px;
-        max-width: 215px;
-    }
-}
-
-
-/* ==========================================
-   ROUND 2C — EDITORIAL TYPOGRAPHY
-   Luojia Memory Archive
-========================================== */
-
-.site-header {
-    min-height: 108px;
-    padding: 15px 20px 17px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    background: #F0E5CC;
-    border-bottom: 1px solid rgba(199, 181, 138, 0.65);
-}
-
-.site-header h1 {
-    margin: 0;
-
-    font-family: "LXGW WenKai", "KaiTi", serif;
-    font-size: clamp(31px, 3vw, 40px);
-    font-weight: 400;
-
-    letter-spacing: 1.5px;
-    line-height: 1.35;
-
-    color: #3C4038;
-}
-
-.site-header p {
-    max-width: 760px;
-    margin: 6px 0 0;
-
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 0.45px;
-    line-height: 1.7;
-
-    color: #526B83;
-    text-align: center;
-}
-
-/* Match map height to the updated header */
-
-.map-experience {
-    height: calc(100vh - 108px);
-}
-
-/* Avoid making the longer writing title too heavy */
-
-.panel-heading h2 {
-    font-size: 22px;
-    line-height: 1.55;
-    letter-spacing: 0;
-}
-
-/* Keep placeholder text subtle but readable */
-
-#memoryInput::placeholder {
-    color: #79858B;
-    opacity: 0.82;
-}
-
-/* Small screen adaptations */
-
-@media (max-width: 650px) {
-
-    .site-header {
-        min-height: 116px;
-        padding: 12px 16px;
-    }
-
-    .site-header h1 {
-        font-size: 29px;
-        letter-spacing: 1px;
-    }
-
-    .site-header p {
-        font-size: 11px;
-        line-height: 1.65;
-        letter-spacing: 0.1px;
-    }
-
-    .map-experience {
-        height: calc(100dvh - 116px);
-    }
-
-    .panel-heading h2 {
-        font-size: 20px;
-    }
-}
-
-/* ==========================================
-   ROUND 2D — REFINED MAP OVERLAYS
-   Luojia Memory Archive
-========================================== */
-
-
-/* 1. Lighter archival header */
-
-.site-header {
-    background-color: #FAF5E9;
-    border-bottom: 1px solid rgba(199, 181, 138, 0.45);
-}
-
-.site-header h1 {
-    color: #3C4038;
-    letter-spacing: 0.8px;
-}
-
-.site-header p {
-    color: #526B83;
-}
-
-
-/* 2. Memory count as a small archive label */
-
-.memory-summary {
-    top: 20px;
-    left: 20px;
-
-    gap: 10px;
-    padding: 9px 14px;
-
-    background: rgba(255, 249, 237, 0.94);
-    border: 1px solid rgba(199, 181, 138, 0.58);
-    border-radius: 4px;
-
-    box-shadow:
-        0 2px 10px rgba(60, 64, 56, 0.09);
-}
-
-.summary-label {
-    font-size: 11px;
-    color: #526B83;
-}
-
-.summary-number {
-    gap: 5px;
-}
-
-.summary-number strong {
-    font-family: "LXGW WenKai", "KaiTi", serif;
-    font-size: 22px;
-    font-weight: 400;
-    color: #B85C45;
-}
-
-.summary-number span {
-    font-size: 11px;
-    color: #3C4038;
-}
-
-
-/* 3. Make zoom and Home controls form one vertical group */
-
-/* Only affects controls in the bottom-left corner */
-
-.leaflet-bottom.leaflet-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-/* Preserve Leaflet controls while correcting their order */
-
-.leaflet-bottom.leaflet-left .leaflet-control {
-    float: none;
-    clear: none;
-    margin-left: 16px;
-    margin-bottom: 0;
-}
-
-/* Zoom buttons at the top */
-
-.leaflet-bottom.leaflet-left .leaflet-control-zoom {
-    order: 1;
-    margin-bottom: 0;
-}
-
-/* Return-to-campus button underneath */
-
-.leaflet-bottom.leaflet-left .home-control {
-    order: 2;
-    margin-top: -1px !important;
-    margin-bottom: 16px;
-}
-
-
-/* 4. Give all three map buttons consistent styling */
-
-.leaflet-control-zoom,
-.home-control {
-    border: 1px solid rgba(199, 181, 138, 0.85) !important;
-    border-radius: 4px !important;
-
-    box-shadow:
-        0 2px 8px rgba(60, 64, 56, 0.12);
-}
-
-.leaflet-control-zoom a,
-.home-control-button {
-    width: 34px !important;
-    height: 34px !important;
-
-    background: rgba(255, 249, 237, 0.98) !important;
-    color: #3C4038 !important;
-
-    border-color: rgba(199, 181, 138, 0.55) !important;
-
-    font-family: Arial, sans-serif;
-    font-size: 20px;
-}
-
-.leaflet-control-zoom a:hover,
-.home-control-button:hover {
-    background: #F0E5CC !important;
-    color: #B85C45 !important;
-}
-
-.leaflet-control-zoom a:focus-visible,
-.home-control-button:focus-visible {
-    outline: 2px solid #526B83;
-    outline-offset: 2px;
-}
-
-
-/* 5. Make the map guidance less intrusive */
-
-/* Keep a small instruction for first-time visitors */
-
-.map-guidance {
-    right: 18px;
-    bottom: 18px;
-
-    padding: 7px 10px;
-
-    background: rgba(250, 245, 233, 0.88);
-    border: 1px solid rgba(199, 181, 138, 0.40);
-    border-radius: 3px;
-
-    box-shadow: none;
-
-    color: #526B83;
-    font-size: 10px;
-    letter-spacing: 0.2px;
-
-    opacity: 0.84;
-}
-
-.guidance-dot {
-    width: 6px;
-    height: 6px;
-    background: #B85C45;
-}
-
-
-/* 6. Improve visual consistency of the writing panel */
-
-.memory-panel {
-    border-color: rgba(199, 181, 138, 0.8);
-
-    box-shadow:
-        0 2px 3px rgba(60, 64, 56, 0.04),
-        0 8px 24px rgba(60, 64, 56, 0.12),
-        0 22px 50px rgba(60, 64, 56, 0.08);
-}
-
-.panel-heading h2 {
-    color: #3C4038;
-}
-
-.memory-panel label {
-    color: #3C4038;
-    font-weight: 500;
-}
-
-.button-group {
-    gap: 9px;
-}
-
-
-/* 7. Status feedback should appear only when needed */
-
-.status-message {
-    padding: 9px 14px;
-
-    background: rgba(255, 249, 237, 0.97);
-    border: 1px solid rgba(199, 181, 138, 0.65);
-
-    box-shadow:
-        0 3px 14px rgba(60, 64, 56, 0.09);
-
-    font-size: 12px;
-}
-
-/* Preserve the existing empty-state behavior */
-
-.status-message:empty {
-    display: none;
-}
-
-
-/* 8. Small screens */
-
-@media (max-width: 650px) {
-
-    .memory-summary {
-        top: 12px;
-        left: 12px;
-        padding: 8px 10px;
-    }
-
-    .summary-label {
-        font-size: 10px;
-    }
-
-    .summary-number strong {
-        font-size: 19px;
-    }
-
-    .leaflet-bottom.leaflet-left .leaflet-control {
-        margin-left: 12px;
-    }
-
-    .leaflet-bottom.leaflet-left .home-control {
-        margin-bottom: 12px;
-    }
-
-    .map-guidance {
-        right: 12px;
-        bottom: 12px;
-        padding: 6px 8px;
-        font-size: 9px;
-    }
-
-    .memory-panel {
-        box-shadow:
-            0 6px 24px rgba(60, 64, 56, 0.16);
-    }
-}
-
-
-/* ==========================================
-   ROUND 2E — READABLE ARCHIVAL TYPOGRAPHY
-   Luojia Memory Archive
-========================================== */
-
-
-/* 1. Unified editorial typography */
-
-/*
-   LXGW WenKai is used for our interface text.
-   Map tile labels are part of the map images
-   and cannot be changed with this rule.
-*/
-
-body,
-button,
-textarea,
-input,
-.memory-summary,
-.memory-panel,
-.map-guidance,
-.status-message,
-.memory-popup .leaflet-popup-content {
-    font-family:
-        "LXGW WenKai",
-        "KaiTi",
-        "Microsoft YaHei",
-        sans-serif;
-}
-
-
-/* 2. Larger subtitle, slightly taller header */
-
-.site-header {
-    min-height: 132px;
-    padding: 17px 22px 18px;
-    background: #FAF5E9;
-}
-
-.site-header h1 {
-    font-size: clamp(33px, 3vw, 41px);
-    letter-spacing: 0.8px;
-}
-
-.site-header p {
-    max-width: 900px;
-    margin-top: 9px;
-
-    font-family:
-        "LXGW WenKai",
-        "KaiTi",
-        "Microsoft YaHei",
-        sans-serif;
-
-    font-size: 15px;
-    line-height: 1.8;
-    letter-spacing: 0.1px;
-
-    color: #526B83;
-}
-
-/* The map gives some space back to the header */
-
-.map-experience {
-    height: calc(100vh - 132px);
-    min-height: 430px;
-}
-
-
-/* 3. Larger memory count */
-
-.memory-summary {
-    top: 20px;
-    left: 20px;
-    padding: 11px 16px;
-    gap: 12px;
-}
-
-.summary-label {
-    font-size: 14px;
-    color: #526B83;
-}
-
-.summary-number {
-    gap: 5px;
-}
-
-.summary-number strong {
-    font-size: 27px;
-    font-weight: 500;
-}
-
-.summary-number span {
-    font-size: 14px;
-}
-
-
-/* 4. Larger zoom and return-to-campus controls */
-
-.leaflet-control-zoom a,
-.home-control-button {
-    width: 39px !important;
-    height: 39px !important;
-    line-height: 39px !important;
-
-    font-size: 23px;
-}
-
-.home-control-button svg {
-    width: 21px;
-    height: 21px;
-}
-
-
-/* 5. Remove redundant interface instructions */
-
-/*
-   Keep the bottom-right map guidance.
-   Status feedback remains hidden when empty,
-   but appears temporarily during interactions.
-*/
-
-.map-guidance {
-    right: 20px;
-    bottom: 18px;
-    padding: 10px 13px;
-
-    font-size: 13px;
-    letter-spacing: 0;
-
-    opacity: 0.98;
-}
-
-.guidance-dot {
-    width: 7px;
-    height: 7px;
-}
-
-.status-message {
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-.status-message:empty {
-    display: none;
-}
-
-
-/* 6. Reading memory: story is the focus */
-
-.memory-popup .leaflet-popup-content {
-    margin: 19px 22px 21px;
-
-    min-width: 185px;
-    max-width: 280px;
-
-    font-family:
-        "LXGW WenKai",
-        "KaiTi",
-        "Microsoft YaHei",
-        sans-serif;
-
-    font-size: 16px;
-    line-height: 1.95;
-
-    color: #3C4038;
-}
-
 .memory-popup .leaflet-popup-content .memory-story p {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+  color: var(--navy);
+  font: inherit;
+  line-height: 1.95;
+  letter-spacing: .15px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.memory-popup .memory-story strong { display: none; }
+.memory-popup .leaflet-popup-tip { background: var(--paper); box-shadow: none; }
+.memory-popup .leaflet-popup-close-button {
+  color: var(--green) !important;
+  font-size: 20px !important;
+}
+.memory-popup .leaflet-popup-close-button:hover { color: var(--navy) !important; }
 
-    font-family: inherit;
-    font-size: 16px;
-    line-height: 1.95;
-    letter-spacing: 0.2px;
+/* Status is operation-specific; map guidance remains low-profile. */
+.status-message {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  z-index: 850;
+  transform: translateX(-50%);
+  max-width: min(600px, calc(100% - 38px));
+  padding: 9px 14px;
+  background: rgba(255,252,246,.96);
+  border: 0;
+  border-left: 2px solid var(--gold);
+  border-radius: 2px;
+  box-shadow: 0 3px 13px var(--shadow);
+  color: var(--navy);
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+  pointer-events: none;
+}
+.status-message:empty { display: none; }
+.map-guidance {
+  position: absolute;
+  right: 17px;
+  bottom: 17px;
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  background: rgba(255,252,246,.94);
+  border: 0;
+  border-bottom: 1px solid var(--line-gold);
+  border-radius: 2px;
+  color: var(--navy);
+  font-size: 12px;
+  pointer-events: none;
+}
+.guidance-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; }
 
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
+/* Existing temporary selection and add button */
+.selection-dot {
+  width: 17px;
+  height: 17px;
+  background: var(--green);
+  border: 3px solid var(--paper);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(17,87,64,.23), 0 3px 8px rgba(0,37,84,.25);
+}
+.add-memory-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 39px;
+  height: 39px;
+  color: white;
+  background: var(--green);
+  border: 3px solid var(--paper);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0,37,84,.22);
+  font-size: 25px;
+  line-height: 1;
+  cursor: pointer;
+}
+.add-memory-button:hover { background: var(--green-dark); }
+.selection-marker, .add-button-marker, .saved-memory-marker { background: transparent; border: none; }
+.saved-memory-marker svg {
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 2px 2px rgba(0,37,84,.19));
+}
+.saved-memory-marker:hover svg { filter: drop-shadow(0 3px 5px rgba(0,37,84,.29)); }
+
+/* Leaflet's bottom-left controls: zoom, then return to campus */
+.leaflet-bottom.leaflet-left { display: flex; flex-direction: column; align-items: flex-start; }
+.leaflet-bottom.leaflet-left .leaflet-control {
+  float: none;
+  clear: none;
+  margin-left: 14px;
+  margin-bottom: 0;
+}
+.leaflet-bottom.leaflet-left .leaflet-control-zoom { order: 1; margin-bottom: 0; }
+.leaflet-bottom.leaflet-left .home-control {
+  order: 2;
+  margin-top: -1px !important;
+  margin-bottom: 14px;
+}
+.leaflet-control-zoom, .home-control {
+  border: 0 !important;
+  border-radius: 2px !important;
+  box-shadow: 0 2px 9px rgba(0,37,84,.13) !important;
+}
+.leaflet-control-zoom a, .home-control-button {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 39px !important;
+  height: 39px !important;
+  line-height: 39px !important;
+  background: var(--paper-light) !important;
+  color: var(--navy) !important;
+  border-color: var(--line-gold) !important;
+  border-radius: 0 !important;
+  font-family: Arial, sans-serif;
+  font-size: 23px !important;
+}
+.leaflet-control-zoom a:hover, .home-control-button:hover {
+  background: var(--green-pale) !important;
+  color: var(--green) !important;
+}
+.home-control-button svg { display: block; width: 21px; height: 21px; }
+.leaflet-control-zoom a:focus-visible, .home-control-button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
 }
 
-/* Hide any stale title styling if present */
-
-.memory-popup .leaflet-popup-content .memory-story strong {
-    display: none;
-}
-
-
-/* 7. Larger writing interface text */
-
-.panel-heading h2 {
-    font-size: 23px;
-}
-
-.memory-panel label {
-    font-size: 15px;
-}
-
-.location-info span {
-    font-size: 13px;
-}
-
-.location-info strong {
-    font-size: 14px;
-}
-
-#memoryInput {
-    font-family:
-        "LXGW WenKai",
-        "KaiTi",
-        "Microsoft YaHei",
-        sans-serif;
-
-    font-size: 16px;
-    line-height: 30px;
-}
-
-#memoryInput::placeholder {
-    font-size: 15px;
-    line-height: 1.9;
-}
-
-.character-count,
-.error-message,
-.button-group button {
-    font-size: 14px;
-}
-
-
-/* 8. Responsive adjustments */
-
+/* Responsive: keep words legible and show illustration along header bottom */
 @media (max-width: 650px) {
-
-    .site-header {
-        min-height: 146px;
-        padding: 15px 16px;
-    }
-
-    .site-header h1 {
-        font-size: 31px;
-    }
-
-    .site-header p {
-        max-width: 360px;
-        margin-top: 8px;
-        font-size: 13px;
-        line-height: 1.8;
-    }
-
-    .map-experience {
-        height: calc(100dvh - 146px);
-        min-height: 360px;
-    }
-
-    .memory-summary {
-        top: 12px;
-        left: 12px;
-        padding: 10px 12px;
-    }
-
-    .summary-label {
-        font-size: 12px;
-    }
-
-    .summary-number strong {
-        font-size: 23px;
-    }
-
-    .summary-number span {
-        font-size: 12px;
-    }
-
-    .leaflet-control-zoom a,
-    .home-control-button {
-        width: 37px !important;
-        height: 37px !important;
-        line-height: 37px !important;
-    }
-
-    .map-guidance {
-        right: 12px;
-        bottom: 12px;
-        padding: 8px 10px;
-        font-size: 11px;
-    }
-
-    .memory-popup .leaflet-popup-content {
-        max-width: 235px;
-    }
-
-    .memory-popup .leaflet-popup-content .memory-story p {
-        font-size: 15px;
-    }
+  .site-header {
+    min-height: 174px;
+    padding: 12px 14px 67px;
+    background-size: auto 120px;
+    background-position: center bottom;
+  }
+  .site-header h1 { font-size: 30px; line-height: 1.35; }
+  .site-header p {
+    max-width: 360px;
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .map-experience {
+    height: calc(100vh - 174px);
+    height: calc(100dvh - 174px);
+    min-height: 360px;
+  }
+  .memory-summary { top: 11px; left: 11px; padding: 8px 10px; gap: 8px; }
+  .summary-label, .summary-number span { font-size: 12px; }
+  .summary-number strong { font-size: 23px; }
+  .memory-panel {
+    top: 10px;
+    right: 10px;
+    width: calc(100% - 20px);
+    max-height: calc(100% - 20px);
+    padding: 16px;
+  }
+  .panel-heading h2 { font-size: 20px; }
+  #memoryInput { font-size: 16px; }
+  .memory-popup .leaflet-popup-content { min-width: 145px; max-width: 235px; }
+  .memory-popup .leaflet-popup-content .memory-story p { font-size: 15px; }
+  .map-guidance { right: 9px; bottom: 9px; font-size: 11px; padding: 7px 9px; }
+  .status-message { bottom: 57px; font-size: 12px; }
+  .leaflet-bottom.leaflet-left .leaflet-control { margin-left: 10px; }
+  .leaflet-bottom.leaflet-left .home-control { margin-bottom: 10px; }
+  .leaflet-control-zoom a, .home-control-button {
+    width: 37px !important;
+    height: 37px !important;
+    line-height: 37px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
 }

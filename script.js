@@ -319,9 +319,9 @@ memoryInput.addEventListener("input", function () {
     characterCount.textContent = currentLength;
 
     if (currentLength >= 450) {
-        characterCount.style.color = "#B85C45";
+        characterCount.style.color = "#115740";
     } else {
-        characterCount.style.color = "#526B83";
+        characterCount.style.color = "#115740";
     }
 
     errorMessage.textContent = "";
@@ -518,7 +518,7 @@ async function loadMemories() {
 // 15. DISPLAY SAVED MEMORY MARKERS
 // =====================================
 
-// Vintage red map pin icon
+// Campus-green archival pin icon
 const savedMemoryIcon = L.divIcon({
     className: "saved-memory-marker",
 
@@ -535,7 +535,7 @@ const savedMemoryIcon = L.divIcon({
                 cy="48"
                 rx="11"
                 ry="3"
-                fill="#3C4038"
+                fill="#002554"
                 opacity="0.18"
             />
 
@@ -544,7 +544,7 @@ const savedMemoryIcon = L.divIcon({
                    C13 35 3 26 3 18
                    A17 17 0 1 1 37 18
                    C37 26 27 35 20 46Z"
-                fill="#934635"
+                fill="#0B4130"
             />
 
             <path
@@ -552,12 +552,12 @@ const savedMemoryIcon = L.divIcon({
                    C14 33 6 25 6 18
                    A14 14 0 1 1 34 18
                    C34 25 26 33 20 43Z"
-                fill="#B85C45"
+                fill="#115740"
             />
 
             <path
                 d="M12 13 Q16 7 22 10"
-                stroke="#F6CCB6"
+                stroke="#8FC0A5"
                 stroke-width="2.5"
                 fill="none"
                 stroke-linecap="round"
@@ -567,7 +567,7 @@ const savedMemoryIcon = L.divIcon({
                 cx="20"
                 cy="18"
                 r="5.5"
-                fill="#F0E5CC"
+                fill="#FFF9ED"
             />
         </svg>
     `,
@@ -642,7 +642,7 @@ function clearSelection() {
 
     memoryInput.value = "";
     characterCount.textContent = "0";
-    characterCount.style.color = "#526B83";
+    characterCount.style.color = "#115740";
 
     errorMessage.textContent = "";
 
